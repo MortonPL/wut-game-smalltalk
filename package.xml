@@ -1,0 +1,5 @@
+<package>
+  <name>Ahoy</name>
+  <file>adventure.st</file>
+  <filein>adventure.st</filein>
+</package>
