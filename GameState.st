@@ -16,7 +16,7 @@ Object subclass: GameState [
         inventory := Inventory new.
         inventory modify: 'balls' by: 99.
         inventory modify: 'cubes' by: 100.
-        inventory modify: 'smetana' by: 0.
+        inventory modify: 'smetana' by: 1.
     ]
 
     position [

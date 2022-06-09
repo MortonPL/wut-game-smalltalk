@@ -109,10 +109,10 @@ Object subclass: Game [
 
     tryStorm: direction [
         <category: 'private'>
-        | chance |
+        | random |
         "TODO: Check tile"
-        chance := rng between: 0 and: 29.
-        (chance < 10)
+        random := rng between: 0 and: 29.
+        (random < 10)
             ifTrue: [ self doStorm: direction. ]
     ]
 
@@ -141,17 +141,42 @@ Object subclass: Game [
         'You''ve been hit by a storm!' displayNl.
     ]
 
+    minWorth := 100.
+    maxWorth := 500.
+    piratesChance := 1 / 2.
+
     tryPirates [
         <category: 'private'>
-        | chance |
-        chance := rng between: 0 and: 100.
-        (chance < 10)
+        | worth chance random |
+        worth := state inventory worth.
+        chance := worth - minWorth.
+        chance := chance / (maxWorth - minWorth).
+        chance := chance * piratesChance.
+        random := rng between: 0 and: 99.
+        ((random  / 100) < chance)
             ifTrue: [ self doPirates. ]
     ]
 
     doPirates [
         <category: 'helper'>
+        | mercenaries |
+        'You''ve been attacked by pirates!' displayNl.
+        mercenaries := state inventory count: 'mercenary'.
+        (mercenaries > 0)
+            ifTrue: [
+                state inventory modify: 'mercenary' by: -1.
+                'Your mercenaries defended you! (-1 mercenary)' displayNl.
+                self tryGiveMapPiece1.
+            ]
+            ifFalse: [
+                state inventory halve.
+                'The''ve robbed half of your possesions!' displayNl.
+            ].
+    ]
 
+    tryGiveMapPiece1 [
+        <category: 'helper'>
+        "TODO"
     ]
 
     readCommand [
