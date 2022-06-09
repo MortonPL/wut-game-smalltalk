@@ -6,6 +6,8 @@
   <filein>Direction.st</filein>
   <filein>Move.st</filein>
   <filein>Position.st</filein>
+  <filein>BasePrice.st</filein>
+  <filein>Offer.st</filein>
   <filein>Merchant.st</filein>
   <filein>Tile.st</filein>
   <filein>Map.st</filein>
