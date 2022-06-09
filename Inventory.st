@@ -10,6 +10,7 @@ Object subclass: Inventory [
     ]
 
     init [
+        <category: 'initialization'>
         content := Dictionary new.
         ^self
     ]
