@@ -57,9 +57,12 @@ Object subclass: Game [
         ^g
     ]
 
-    registerInstruction: longName short: shortName code: block [
+    registerInstruction: longName short: shortName code: block argc: count [
         <category: 'private'>
-        instructionMap at: shortName put: (instructionMap at: longName put: block)
+        | value |
+        value := {count. block}.
+        instructionMap at: shortName put: value.
+        instructionMap at: longName put: value.
     ]
 
     init [
@@ -70,20 +73,20 @@ Object subclass: Game [
         map := Map new.
 
         instructionMap := Dictionary new.
-        self registerInstruction: #help short: #h code: [ instructionsText displayLines. ].
-        self registerInstruction: #look short: #l code: [ self lookAround. ].
-        self registerInstruction: #inventory short: #i code: [ self showInventory. ].
-        self registerInstruction: #appraise short: #a code: [ :args | self appraiseItem: (args at: 1). ].
-        self registerInstruction: #north short: #n code: [ self movePlayer: #n. ].
-        self registerInstruction: #east short: #e code: [ self movePlayer: #e. ].
-        self registerInstruction: #south short: #s code: [ self movePlayer: #s. ].
-        self registerInstruction: #west short: #w code: [ self movePlayer: #w. ].
-        self registerInstruction: #buy short: #b code: [ :args | self buyItem: (args at: 1) quantity: (args at: 2). ].
-        self registerInstruction: #sell short: #z code: [ :args | self sellItem: (args at: 1) quantity: (args at: 2). ].
-        self registerInstruction: #ask short: #k code: [ :args | self askAbout: (args at: 1). ].
-        self registerInstruction: #save short: #v code: [ :args | self saveStateTo: (args at: 1). ].
-        self registerInstruction: #load short: #d code: [ :args | self loadStateFrom: (args at: 1). ].
-        self registerInstruction: #quit short: #q code: [ isOver := true ]
+        self registerInstruction: #help short: #h code: [ instructionsText displayLines. ] argc: 0.
+        self registerInstruction: #look short: #l code: [ self lookAround. ] argc: 0.
+        self registerInstruction: #inventory short: #i code: [ self showInventory. ] argc: 0.
+        self registerInstruction: #appraise short: #a code: [ :args | self appraiseItem: (args at: 1). ] argc: 1.
+        self registerInstruction: #ask short: #k code: [ :args | self askAbout: (args at: 1). ] argc: 1.
+        self registerInstruction: #north short: #n code: [ self movePlayer: #n. ] argc: 0.
+        self registerInstruction: #east short: #e code: [ self movePlayer: #e. ] argc: 0.
+        self registerInstruction: #south short: #s code: [ self movePlayer: #s. ] argc: 0.
+        self registerInstruction: #west short: #w code: [ self movePlayer: #w. ] argc: 0.
+        self registerInstruction: #buy short: #b code: [ :args | self buyItem: (args at: 1) quantity: (args at: 2). ] argc: 2.
+        self registerInstruction: #sell short: #z code: [ :args | self sellItem: (args at: 1) quantity: (args at: 2). ] argc: 2.
+        self registerInstruction: #save short: #v code: [ :args | self saveStateTo: (args at: 1). ] argc: 1.
+        self registerInstruction: #load short: #d code: [ :args | self loadStateFrom: (args at: 1). ] argc: 1.
+        self registerInstruction: #quit short: #q code: [ isOver := true ] argc: 0
     ]
 
     movePlayer: direction [
@@ -137,7 +140,7 @@ Object subclass: Game [
 
     sellItem: itemName quantity: anInteger [
         <category: 'private'>
-        | position tile merchant unitPrice totalPrice items |
+        | position tile merchant unitPrice totalPrice items coins |
         position := state position.
         anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
         tile := map atX: (position column) atY: (position row).
@@ -180,18 +183,26 @@ Object subclass: Game [
         ^state
     ]
 
+    command: cmd with: args [
+        | validCommand action argc |
+        validCommand := instructionMap at: (cmd asSymbol) ifAbsent: [ ^'Unknown command.' displayNl. ].
+        argc := validCommand at: 1.
+        (args size == argc)
+            ifFalse: [ ^'Invalid amount of arguments.' displayNl. ].
+        action := validCommand at: 2.
+        action cull: args
+    ]
+
     "Run the game."
     run [
-        | cmd isUnknown action |
+        | cmd isUnknown tokens |
         introductionText displayLines.
         instructionsText displayLines.
 
         "Game loop."
         [ isOver ] whileFalse: [
-            isUnknown := true.
-            cmd := self readCommand tokenize: ' '.
-            action := instructionMap at: ((cmd at: 1) asSymbol) ifAbsent: [ [ 'Unknown command.' displayNl. ] ].
-            action cull: cmd allButFirst
+            tokens := self readCommand tokenize: ' '.
+            self command: (tokens at: 1) with: (tokens allButFirst).
         ]
     ]
 ]

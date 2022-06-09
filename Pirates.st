@@ -5,6 +5,7 @@ Game extend [
 
     tryPirates [
         <category: 'private'>
+        <comment: 'Attempts to perform the pirate event.'>
         | worth chance random |
         worth := state inventory worth.
         chance := worth - minWorth.
@@ -17,6 +18,7 @@ Game extend [
 
     doPirates [
         <category: 'helper'>
+        <comment: 'Performs the pirate event.'>
         | mercenaries |
         'You''ve been attacked by pirates!' displayNl.
         mercenaries := state inventory count: 'mercenary'.
@@ -36,6 +38,7 @@ Game extend [
 
     tryGiveMapPiece1 [
         <category: 'helper'>
+        <comment: 'Gives the player a map piece as necessary.'>
         | mapCount |
         mapCount := state inventory count: 'map_piece_1'.
         (mapCount == 0)
@@ -61,6 +64,7 @@ Inventory extend [
 
     worth [
         <category: 'helper'>
+        <comment: 'Calculates worth of the inventory. Also known as pirate attraction.'>
         | totalWorth |
         totalWorth := 0.
         content keysAndValuesDo: [ :key :value |

@@ -1,6 +1,7 @@
 Game extend [
     tryStorm: direction [
         <category: 'private'>
+        <comment: 'Attempts to perform the storm event.'>
         | position tile random |
         position := state position.
         tile := map atX: (position column) atY: (position row).
@@ -28,6 +29,7 @@ Game extend [
 
     doStorm: direction [
         <category: 'helper'>
+        <comment: 'Performs the storm event.'>
         | rotation offset |
         rotation := dirNumMap at: direction.
         rotation := rotation + (rng between: -1 and: 1).

@@ -20,6 +20,7 @@ Inventory extend [
 
     missingItem: item [
         <category: 'printer'>
+        <comment: 'Displays one of the ''missing item'' messages during failed appraisal.'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 4.
@@ -28,6 +29,7 @@ Inventory extend [
 
     appraise: item [
         <category: 'printer'>
+        <comment: 'Displays messages for item appraisal.'>
         | count description |
         count := content at: item ifAbsent: [ 0 ].
         (count > 0)

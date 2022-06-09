@@ -3,6 +3,7 @@ Object subclass: Inventory [
     
     Inventory class >> new [
         <category: 'instance creation'>
+        <comment: 'Creates an empty inventory.'>
         | o |
         o := super new.
         o init.
@@ -11,11 +12,13 @@ Object subclass: Inventory [
 
     init [
         <category: 'initialization'>
+        <comment: 'Initializes a new inventory.'>
         content := Dictionary new.
         ^self
     ]
 
     serialize: stream [
+        <category: 'serde'>
         content keysAndValuesDo: [:key :value | 
             stream nextPutAll: key; nextPut: $|;
                    nextPutAll: (value printString); nextPut: $|
@@ -24,6 +27,7 @@ Object subclass: Inventory [
     ]
 
     deserialize: stream [
+        <category: 'serde'>
         | stream2 key value |
         stream2 := ReadStream on: (stream upTo: $\).
         [stream2 atEnd] whileFalse: [
@@ -35,6 +39,7 @@ Object subclass: Inventory [
 
     modify: item by: difference [
         <category: 'mutator'>
+        <comment: 'Updates the amount of specific item by provided amount.'>
         | amount |
         amount := self count: item.
         amount := amount + difference.
@@ -45,11 +50,13 @@ Object subclass: Inventory [
 
     count: item [
         <category: 'accessor'>
+        <comment: 'Returns the amount of specified item, defaults to 0.'>
         ^content at: item ifAbsent: [ ^0 ]
     ]
 
     halve [
         <category: 'mutator'>
+        <comment: 'Halves the amount of items in the inventory. Fractions get rounded down.'>
         content keysAndValuesDo: [ :key :value |
             content at: key put: ((value / 2) floor).
         ].
@@ -57,6 +64,7 @@ Object subclass: Inventory [
 
     show [
         <category: 'printer'>
+        <comment: 'Displays contents of the inventory. Skips items with 0 count.'>
         | items |
         items := content select: [ :value | value > 0 ].
         (items isEmpty)

@@ -1,6 +1,7 @@
 Map extend [
     lookAround: position [
         <category: 'printer'>
+        <comment: 'Describes the current and surrounding tiles.'>
         | x y |
         x := position column.
         y := position row.
