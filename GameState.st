@@ -14,10 +14,8 @@ Object subclass: GameState [
         playerName := 'foe'.
         position := Position x: 1 y: 1 xLim: #(1 6) yLim: #(1 6).
         inventory := Inventory new.
-        inventory modify: 'balls' by: 99.
-        inventory modify: 'cubes' by: 100.
-        inventory modify: 'smetana' by: 1.
-        inventory modify: 'mercenary' by: 5.
+        inventory modify: 'mercenary' by: 1.
+        inventory modify: 'coin' by: 100.
     ]
 
     position [

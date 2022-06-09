@@ -43,12 +43,12 @@ Object subclass: Inventory [
         items := content select: [ :value | value > 0 ].
         (items isEmpty)
             ifTrue: [
-                'You have nothing.' displayNl.
+                'Your pockets are full of hopes and dreams.' displayNl.
             ]
             ifFalse: [
-                'You have:' displayNl.
+                'Your pockets are full with:' displayNl.
                 items keysAndValuesDo: [ :key :value |
-                    '  - ' display.
+                    ' - ' display.
                     value display.
                     ' of ' display.
                     key display.

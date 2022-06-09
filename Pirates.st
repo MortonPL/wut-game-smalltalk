@@ -1,6 +1,6 @@
 Game extend [
-    minWorth := 100.
-    maxWorth := 500.
+    minWorth := 500.
+    maxWorth := 7500.
     piratesChance := 1 / 2.
 
     tryPirates [
@@ -35,10 +35,10 @@ Game extend [
     tryGiveMapPiece1 [
         <category: 'helper'>
         | mapCount |
-        mapCount := state inventory count: 'map piece 1'.
+        mapCount := state inventory count: 'map_piece_1'.
         (mapCount == 0)
             ifTrue: [
-                state inventory modify: 'map piece 1' by: 1.
+                state inventory modify: 'map_piece_1' by: 1.
                 'You''ve found a map piece in the wreckage!' displayNl.
             ].
     ]
@@ -46,10 +46,15 @@ Game extend [
 
 Inventory extend [
     itemWorth := Dictionary from: {
-        'balls' -> 1.
-        'cubes' -> 5.
-        'smetana' -> 100.
-        'mercenary' -> -50
+        'rum' -> 50.
+        'gunpowder' -> 30.
+        'blunderbuss' -> 30.
+        'ration' -> 10.
+        'banana' -> 10.
+        'map_piece_1' -> 5000.
+        'map_piece_2' -> 5000.
+        'mercenary' -> -1000.
+        'coin' -> 1
     }.
 
     worth [
