@@ -9,7 +9,7 @@ Collaborators:
 * ..."
 
 Object subclass: Game [
-    | state isOver instructionMap rng |
+    | state isOver instructionMap rng map |
 
     introductionText := #(
         '+=======================================+'
@@ -68,6 +68,7 @@ Object subclass: Game [
         isOver := false.
         state := GameState new.
         rng := Random new.
+        map := Map new.
 
         instructionMap := Dictionary new.
         self registerInstruction: #help short: #h code: [ instructionsText displayLines. ].
