@@ -1,5 +1,8 @@
 <package>
   <name>Ahoy</name>
-  <file>adventure.st</file>
-  <filein>adventure.st</filein>
+  <filein>Serialization.st</filein>
+  <filein>Move.st</filein>
+  <filein>Position.st</filein>
+  <filein>GameState.st</filein>
+  <filein>Adventure.st</filein>
 </package>
