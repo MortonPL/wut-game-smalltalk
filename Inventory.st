@@ -34,21 +34,42 @@ Object subclass: Inventory [
         <category: 'mutator'>
         content keysAndValuesDo: [ :key :value |
             content at: key put: ((value / 2) floor).
-        ]
+        ].
     ]
 
     show [
         <category: 'printer'>
-        #('You have:') displayLines.
-        content keysAndValuesDo: [ :key :value |
-            (value > 0)
-                ifTrue: [
+        | items |
+        items := content values select: [ :value | value > 0 ].
+        (items isEmpty)
+            ifTrue: [
+                'You have nothing.' displayNl.
+            ]
+            ifFalse: [
+                'You have:' displayNl.
+                items keysAndValuesDo: [ :key :value |
                     '  - ' display.
                     value display.
                     ' of ' display.
                     key display.
                     ',' displayNl.
-                ]
-        ]
+                ].
+            ].
+    ]
+
+    itemWorth := Dictionary from: {
+        'balls' -> 1.
+        'cubes' -> 5.
+        'smetana' -> 100
+    }.
+
+    worth [
+        <category: 'helper'>
+        | totalWorth |
+        totalWorth := 0.
+        content keysAndValuesDo: [ :key :value |
+            totalWorth := totalWorth + (value * (itemWorth at: key ifAbsent: [ 0 ])).
+        ].
+        ^totalWorth
     ]
 ]
