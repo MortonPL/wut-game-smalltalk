@@ -5,6 +5,18 @@ Object subclass: Tile [
         r := super new.
         ^r
     ]
+
+    describeCurrent [
+        self subclassResponsibility
+    ]
+
+    describeRemote [
+        self subclassResponsibility
+    ]
+
+    isLand [
+        self subclassResponsibility
+    ]
 ]
 
 Tile subclass: ShallowWater [
@@ -16,7 +28,6 @@ Tile subclass: ShallowWater [
     ]
 
     describeCurrent [
-        <category: 'private'>
         ^'You are on a calm sea.'
     ]
 
@@ -27,11 +38,14 @@ Tile subclass: ShallowWater [
     }.
 
     describeRemote [
-        <category: 'private'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
         ^remoteMessages at: random
+    ]
+
+    isLand [
+        ^false
     ]
 ]
 
@@ -44,7 +58,6 @@ Tile subclass: DeepWater [
     ]
 
     describeCurrent [
-        <category: 'private'>
         ^'The sea is unsteady. Your ship could be blown away at any moment...'
     ]
 
@@ -55,11 +68,14 @@ Tile subclass: DeepWater [
     }.
 
     describeRemote [
-        <category: 'private'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
         ^remoteMessages at: random
+    ]
+
+    isLand [
+        ^false
     ]
 ]
 
@@ -80,7 +96,6 @@ Tile subclass: Island [
     ]
 
     describeCurrent [
-        <category: 'private'>
         ^'You are on the ', name, '. Rumours are you can trade with ', (merchant name), ' here. You gotta ask them.'
     ]
 
@@ -91,11 +106,18 @@ Tile subclass: Island [
     }.
 
     describeRemote [
-        <category: 'private'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
         ^remoteMessages at: random
+    ]
+
+    merchant [
+        ^merchant
+    ]
+
+    isLand [
+        ^true
     ]
 ]
 
@@ -108,7 +130,6 @@ Tile subclass: OutOfBounds [
     ]
 
     describeCurrent [
-        <category: 'private'>
         ^'Out of bounds.'
     ]
 
@@ -119,10 +140,13 @@ Tile subclass: OutOfBounds [
     }.
 
     describeRemote [
-        <category: 'private'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
         ^remoteMessages at: random
+    ]
+
+    isLand [
+        ^false
     ]
 ]

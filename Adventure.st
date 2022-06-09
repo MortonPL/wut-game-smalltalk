@@ -73,16 +73,16 @@ Object subclass: Game [
         self registerInstruction: #help short: #h code: [ instructionsText displayLines. ].
         self registerInstruction: #look short: #l code: [ self lookAround. ].
         self registerInstruction: #inventory short: #i code: [ self showInventory. ].
-        self registerInstruction: #appraise short: #a code: [ self appraiseItem: 'balls'. ].
+        self registerInstruction: #appraise short: #a code: [ :args | self appraiseItem: (args at: 1). ].
+        self registerInstruction: #ask short: #k code: [ :args | self askAbout: (args at: 1). ].
         self registerInstruction: #north short: #n code: [ self movePlayer: #n. ].
         self registerInstruction: #east short: #e code: [ self movePlayer: #e. ].
         self registerInstruction: #south short: #s code: [ self movePlayer: #s. ].
         self registerInstruction: #west short: #w code: [ self movePlayer: #w. ].
-        self registerInstruction: #buy short: #b code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #sell short: #z code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #ask short: #k code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #save short: #v code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #load short: #d code: [ 'Instruction not implemented.' displayNl. ].
+        self registerInstruction: #buy short: #b code: [ :args | self buyItem: (args at: 1) quantity: (args at: 2). ].
+        self registerInstruction: #sell short: #z code: [ :args | self sellItem: (args at: 1) quantity: (args at: 2). ].
+        self registerInstruction: #save short: #v code: [ :args | self saveStateTo: (args at: 1). ].
+        self registerInstruction: #load short: #d code: [ :args | self loadStateFrom: (args at: 1). ].
         self registerInstruction: #quit short: #q code: [ isOver := true ]
     ]
 
@@ -117,6 +117,56 @@ Object subclass: Game [
         map lookAround: position.
     ]
 
+    buyItem: itemName quantity: anInteger [
+        <category: 'private'>
+        | tile merchant unitPrice totalPrice coins |
+        anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
+        tile := (map atX: position column atY: position row).
+        tile isLand ifFalse: [ ^'There is no merchant here' displayNl ].
+        merchant := tile merchant.
+        merchant sells: itemName ifFalse: [ ^(merchant name, ' has no ', itemName, ' in stock') displayNl ].
+        unitPrice := merchant offer sellingPriceForSingle: itemName.
+        totalPrice := anInteger * unitPrice.
+        coins := state inventory count: 'coin'.
+        coins < totalPrice ifTrue: [ ^'Come back when you''re a little richer.' displayNl ].
+        state inventory modify: 'coin' by: totalPrice negated.
+        state inventory modify: itemName by: anInteger.
+        ('You bought ', anInteger, ' of ', itemName, ' from ', merchant name , ' for ', totalPrice, ' coins.') displayNl.
+    ]
+
+    sellItem: itemName quantity: anInteger [
+        <category: 'private'>
+        | tile merchant unitPrice totalPrice items |
+        anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
+        tile := (map atX: position column atY: position row).
+        tile isLand ifFalse: [ ^'There is no merchant here' displayNl ].
+        merchant := tile merchant.
+        merchant buys: itemName ifFalse: [ ^(merchant name, ' doesn''t want your ', itemName) displayNl ].
+        items := state inventory count: itemName.
+        items < anInteger ifTrue: [ ^('There is not enough ', itemName, ' on you.') displayNl ].
+        unitPrice := merchant offer buyingPriceForSingle: itemName.
+        totalPrice := anInteger * unitPrice.
+        coins := state inventory count: 'coin'.
+        state inventory modify: itemName by: anInteger negated.
+        state inventory modify: 'coin' by: totalPrice.
+        ('You sold ', anInteger, ' of ', itemName, ' to ', merchant name , ' for ', totalPrice, ' coins.') displayNl.
+    ]
+
+    askAbout: topic [
+        <category: 'private'>
+        tile := (map atX: position column atY: position row).
+        tile isLand ifFalse: [ ^'There is nobody to ask' displayNl ].
+        tile merchant ask: topic.
+    ]
+
+    saveStateTo: fileName [
+        <category: 'private'>
+    ]
+
+    loadStateFrom: fileName [
+        <category: 'private'>
+    ]
+
     readCommand [
         Transcript nl; show: '> '.
         ^FileStream stdin nextLine
@@ -135,9 +185,9 @@ Object subclass: Game [
         "Game loop."
         [ isOver ] whileFalse: [
             isUnknown := true.
-            cmd := self readCommand.
-            action := instructionMap at: (cmd asSymbol) ifAbsent: [ [ 'Unknown command.' displayNl. ] ].
-            action value
+            cmd := self readCommand tokenize: ' '.
+            action := instructionMap at: ((cmd at: 1) asSymbol) ifAbsent: [ [ 'Unknown command.' displayNl. ] ].
+            action cull: cmd allButFirst
         ]
     ]
 ]

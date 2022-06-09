@@ -5,6 +5,16 @@ Object subclass: Offer [
         ^(super new) buying: buyingDict; selling: sellingDict; yourself
     ]
 
+    buying [
+        <category: 'accessor'>
+        ^buying
+    ]
+
+    selling [
+        <category: 'accessor'>
+        ^selling
+    ]
+
     buying: buyingDict [
         <category: 'accessor'>
         buying := Dictionary from: buyingDict

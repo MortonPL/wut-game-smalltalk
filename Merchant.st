@@ -18,4 +18,19 @@ Object subclass: Merchant [
     ask: topic [
         topic asSymbol = #offer ifTrue: [ offer printLn ]
     ]
+
+    sells: itemName [
+        offer selling at: itemName asSymbol ifAbsent: [ ^false ].
+        ^true
+    ]
+
+    buys: itemName [
+        offer buying at: itemName asSymbol ifAbsent: [ ^false ].
+        ^true
+    ]
+
+    offer [
+        <category: 'accessor'>
+        ^offer
+    ]
 ]
