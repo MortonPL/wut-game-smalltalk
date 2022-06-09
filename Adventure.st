@@ -190,7 +190,7 @@ Object subclass: Game [
         (args size == argc)
             ifFalse: [ ^'Invalid amount of arguments.' displayNl. ].
         action := validCommand at: 2.
-        action cull: args
+        action cull: args.
     ]
 
     "Run the game."
