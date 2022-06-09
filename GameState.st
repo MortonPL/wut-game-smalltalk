@@ -17,6 +17,7 @@ Object subclass: GameState [
         inventory modify: 'balls' by: 99.
         inventory modify: 'cubes' by: 100.
         inventory modify: 'smetana' by: 1.
+        inventory modify: 'mercenary' by: 5.
     ]
 
     position [

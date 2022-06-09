@@ -34,6 +34,31 @@ Game extend [
 
     tryGiveMapPiece1 [
         <category: 'helper'>
-        "TODO"
+        | mapCount |
+        mapCount := state inventory count: 'map piece 1'.
+        (mapCount == 0)
+            ifTrue: [
+                state inventory modify: 'map piece 1' by: 1.
+                'You''ve found a map piece in the wreckage!' displayNl.
+            ].
+    ]
+]
+
+Inventory extend [
+    itemWorth := Dictionary from: {
+        'balls' -> 1.
+        'cubes' -> 5.
+        'smetana' -> 100.
+        'mercenary' -> -50
+    }.
+
+    worth [
+        <category: 'helper'>
+        | totalWorth |
+        totalWorth := 0.
+        content keysAndValuesDo: [ :key :value |
+            totalWorth := totalWorth + (value * (itemWorth at: key ifAbsent: [ 0 ])).
+        ].
+        ^totalWorth
     ]
 ]

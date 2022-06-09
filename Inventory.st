@@ -40,7 +40,7 @@ Object subclass: Inventory [
     show [
         <category: 'printer'>
         | items |
-        items := content values select: [ :value | value > 0 ].
+        items := content select: [ :value | value > 0 ].
         (items isEmpty)
             ifTrue: [
                 'You have nothing.' displayNl.
@@ -55,21 +55,5 @@ Object subclass: Inventory [
                     ',' displayNl.
                 ].
             ].
-    ]
-
-    itemWorth := Dictionary from: {
-        'balls' -> 1.
-        'cubes' -> 5.
-        'smetana' -> 100
-    }.
-
-    worth [
-        <category: 'helper'>
-        | totalWorth |
-        totalWorth := 0.
-        content keysAndValuesDo: [ :key :value |
-            totalWorth := totalWorth + (value * (itemWorth at: key ifAbsent: [ 0 ])).
-        ].
-        ^totalWorth
     ]
 ]
