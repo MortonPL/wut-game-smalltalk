@@ -93,12 +93,12 @@ Object subclass: Game [
         directionString := Direction asString: direction.
         (state position tryMove: (Move fromDirection: direction))
             ifTrue: [
-                Array with: ('  - Moved ', directionString) displayNl.
+                Array with: ('Moved ', directionString) displayNl.
                 self tryStorm: direction.
                 self tryPirates.
                 self lookAround.
             ]
-            ifFalse: [ Array with: ('  - No money to be made up ', directionString) displayNl. ]
+            ifFalse: [ Array with: ('No money to be made up ', directionString) displayNl. ]
     ]
 
     showInventory [
