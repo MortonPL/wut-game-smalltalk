@@ -43,7 +43,7 @@ Object subclass: Inventory [
         content keysAndValuesDo: [ :key :value |
             (value > 0)
                 ifTrue: [
-                    ' - ' display.
+                    '  - ' display.
                     value display.
                     ' of ' display.
                     key display.

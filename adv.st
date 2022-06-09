@@ -12,7 +12,7 @@ Collaborators:
 * ..."
 
 Object subclass: Game [
-    | state isOver instructionMap rng |
+    | state isOver instructionMap |
 
     introductionText := #(
         '+=======================================+'
@@ -70,22 +70,21 @@ Object subclass: Game [
         <category: 'initialization'>
         isOver := false.
         state := GameState new.
-        rng := Random new.
 
         instructionMap := Dictionary new.
-        self registerInstruction: #help short: #h code: [ instructionsText displayLines. ].
-        self registerInstruction: #look short: #l code: [ 'Instruction not implemented.' displayNl. ].
+        self registerInstruction: #help short: #h code: [ instructionsText displayLines ].
+        self registerInstruction: #look short: #l code: [ #('Instruction not implemented.') displayLines ].
         self registerInstruction: #inventory short: #i code: [ self showInventory. ].
-        self registerInstruction: #appraise short: #a code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #north short: #n code: [ self movePlayer: #n. ].
-        self registerInstruction: #east short: #e code: [ self movePlayer: #e. ].
-        self registerInstruction: #south short: #s code: [ self movePlayer: #s. ].
-        self registerInstruction: #west short: #w code: [ self movePlayer: #w. ].
-        self registerInstruction: #buy short: #b code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #sell short: #z code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #ask short: #k code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #save short: #v code: [ 'Instruction not implemented.' displayNl. ].
-        self registerInstruction: #load short: #d code: [ 'Instruction not implemented.' displayNl. ].
+        self registerInstruction: #appraise short: #a code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #north short: #n code: [ self movePlayer: #n ].
+        self registerInstruction: #east short: #e code: [ self movePlayer: #e ].
+        self registerInstruction: #south short: #s code: [ self movePlayer: #s ].
+        self registerInstruction: #west short: #w code: [ self movePlayer: #w ].
+        self registerInstruction: #buy short: #b code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #sell short: #z code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #ask short: #k code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #save short: #v code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #load short: #d code: [ #('Instruction not implemented.') displayLines ].
         self registerInstruction: #quit short: #q code: [ isOver := true ]
     ]
 
@@ -94,64 +93,13 @@ Object subclass: Game [
         | directionString |
         directionString := Direction asString: direction.
         (state position tryMove: (Move fromDirection: direction))
-            ifTrue: [
-                self tryStorm: direction.
-                self tryPirates.
-                Array with: ('  - Moved ', directionString) displayNl.
-            ]
-            ifFalse: [ Array with: ('  - No money to be made up ', directionString) displayNl. ]
+            ifTrue: [ (Array with: ('  - Moved ', directionString)) displayLines ]
+            ifFalse: [ (Array with: ('  - No money to be made up ', directionString)) displayLines ]
     ]
 
     showInventory [
         <category: 'private'>
         state inventory show.
-    ]
-
-    tryStorm: direction [
-        <category: 'private'>
-        | chance |
-        "TODO: Check tile"
-        chance := rng between: 0 and: 29.
-        (chance < 10)
-            ifTrue: [ self doStorm: direction. ]
-    ]
-
-    dirNumMap := Dictionary from: {
-        #n -> 0.
-        #e -> 1.
-        #s -> 2.
-        #w -> 3
-    }.
-
-    numDirMap := Dictionary from: {
-        0 -> #n.
-        1 -> #e.
-        2 -> #s.
-        3 -> #w
-    }.
-
-    doStorm: direction [
-        <category: 'helper'>
-        | rotation offset |
-        rotation := dirNumMap at: direction.
-        rotation := rotation + (rng between: -1 and: 1).
-        rotation := rotation \\ 4.
-        offset := numDirMap at: rotation.
-        (state position tryMove: (Move fromDirection: offset)) displayNl.
-        'You''ve been hit by a storm!' displayNl.
-    ]
-
-    tryPirates [
-        <category: 'private'>
-        | chance |
-        chance := rng between: 0 and: 100.
-        (chance < 10)
-            ifTrue: [ self doPirates. ]
-    ]
-
-    doPirates [
-        <category: 'helper'>
-
     ]
 
     readCommand [
@@ -169,7 +117,7 @@ Object subclass: Game [
         [ isOver ] whileFalse: [
             isUnknown := true.
             cmd := self readCommand.
-            action := instructionMap at: (cmd asSymbol) ifAbsent: [ [ 'Unknown command.' displayNl. ] ].
+            action := instructionMap at: (cmd asSymbol) ifAbsent: [ [ #('Unknown command.') displayLines ] ].
             action value
         ]
     ]
