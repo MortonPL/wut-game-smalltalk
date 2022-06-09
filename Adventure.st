@@ -74,7 +74,7 @@ Object subclass: Game [
         self registerInstruction: #help short: #h code: [ instructionsText displayLines. ].
         self registerInstruction: #look short: #l code: [ 'Instruction not implemented.' displayNl. ].
         self registerInstruction: #inventory short: #i code: [ self showInventory. ].
-        self registerInstruction: #appraise short: #a code: [ 'Instruction not implemented.' displayNl. ].
+        self registerInstruction: #appraise short: #a code: [ self appraiseItem: 'balls'. ].
         self registerInstruction: #north short: #n code: [ self movePlayer: #n. ].
         self registerInstruction: #east short: #e code: [ self movePlayer: #e. ].
         self registerInstruction: #south short: #s code: [ self movePlayer: #s. ].
@@ -103,6 +103,11 @@ Object subclass: Game [
     showInventory [
         <category: 'private'>
         state inventory show.
+    ]
+
+    appraiseItem: item [
+        <category: 'private'>
+        state inventory appraise: item.
     ]
 
     readCommand [
