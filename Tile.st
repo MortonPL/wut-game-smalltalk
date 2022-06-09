@@ -17,12 +17,21 @@ Tile subclass: ShallowWater [
 
     describeCurrent [
         <category: 'private'>
-        ^'You are on a calm sea'
+        ^'You are on a calm sea.'
     ]
+
+    remoteMessages := {
+        'You see a calm sea'.
+        'The weather is beautiful'.
+        'Just the borring ''ol sea'
+    }.
 
     describeRemote [
         <category: 'private'>
-        ^'You see a calm sea'
+        | rng random |
+        rng := Random new.
+        random := rng between: 1 and: 3.
+        ^remoteMessages at: random
     ]
 ]
 
@@ -39,9 +48,18 @@ Tile subclass: DeepWater [
         ^'The sea is unsteady. Your ship could be blown away at any moment...'
     ]
 
+    remoteMessages := {
+        'The sky is about to fall'.
+        'You see the ocean raging'.
+        'You are gonna have a bad time'
+    }.
+
     describeRemote [
         <category: 'private'>
-        ^'You see the ocean raging'
+        | rng random |
+        rng := Random new.
+        random := rng between: 1 and: 3.
+        ^remoteMessages at: random
     ]
 ]
 
@@ -63,12 +81,21 @@ Tile subclass: Island [
 
     describeCurrent [
         <category: 'private'>
-        ^'You are on the ', name, '. Rumours are you can trade with ', (merchant name), ' here. You gotta ask them'
+        ^'You are on the ', name, '. Rumours are you can trade with ', (merchant name), ' here. You gotta ask them.'
     ]
+
+    remoteMessages := {
+        'You spot a piece of land'.
+        'You notice a landrats nest'.
+        'Your barrelman sees land'
+    }.
 
     describeRemote [
         <category: 'private'>
-        ^'You spot a piece of land'
+        | rng random |
+        rng := Random new.
+        random := rng between: 1 and: 3.
+        ^remoteMessages at: random
     ]
 ]
 
@@ -82,11 +109,20 @@ Tile subclass: OutOfBounds [
 
     describeCurrent [
         <category: 'private'>
-        ^'Out of bounds'
+        ^'Out of bounds.'
     ]
+
+    remoteMessages := {
+        'You smell no money'.
+        'No adventure awaits you'.
+        'Nothing of interest'
+    }.
 
     describeRemote [
         <category: 'private'>
-        ^'Out of bounds'
+        | rng random |
+        rng := Random new.
+        random := rng between: 1 and: 3.
+        ^remoteMessages at: random
     ]
 ]
