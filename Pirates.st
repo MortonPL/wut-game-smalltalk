@@ -23,12 +23,14 @@ Game extend [
         (mercenaries > 0)
             ifTrue: [
                 state inventory modify: 'mercenary' by: -1.
-                'Your mercenaries defended you! (-1 mercenary)' displayNl.
+                'Your brave mercenaries have protected you.' displayNl.
+                '(-1 mercenary)' displayNl.
                 self tryGiveMapPiece1.
             ]
             ifFalse: [
                 state inventory halve.
                 'The''ve robbed half of your possesions!' displayNl.
+                'Try hiring some guards next time!' displayNl.
             ].
     ]
 

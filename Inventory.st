@@ -50,10 +50,11 @@ Object subclass: Inventory [
                 items keysAndValuesDo: [ :key :value |
                     ' - ' display.
                     value display.
-                    ' of ' display.
+                    ' of `' display.
                     key display.
-                    ',' displayNl.
+                    '`,' displayNl.
                 ].
+                'and nothing more.' displayNl.
             ].
     ]
 ]
