@@ -1,11 +1,15 @@
 Game extend [
     tryStorm: direction [
         <category: 'private'>
-        | random |
-        "TODO: Check tile"
-        random := rng between: 0 and: 29.
-        (random < 10)
-            ifTrue: [ self doStorm: direction. ]
+        | position tile random |
+        position := state position.
+        tile := map atX: (position column) atY: (position row).
+        (tile isKindOf: DeepWater)
+            ifTrue: [
+                random := rng between: 0 and: 29.
+                (random < 10)
+                    ifTrue: [ self doStorm: direction. ]
+            ]
     ]
 
     dirNumMap := Dictionary from: {

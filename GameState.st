@@ -12,7 +12,7 @@ Object subclass: GameState [
     init [
         <category: 'initialization'>
         playerName := 'foe'.
-        position := Position x: 0 y: 0 xLim: #(0 6) yLim: #(0 6).
+        position := Position x: 1 y: 1 xLim: #(1 6) yLim: #(1 6).
         inventory := Inventory new.
         inventory modify: 'balls' by: 99.
         inventory modify: 'cubes' by: 100.
