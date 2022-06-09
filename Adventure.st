@@ -81,7 +81,7 @@ Object subclass: Game [
         instructionMap := Dictionary new.
         self registerInstruction: #help short: #h code: [ instructionsText displayLines ].
         self registerInstruction: #look short: #l code: [ #('Instruction not implemented.') displayLines ].
-        self registerInstruction: #inventory short: #i code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #inventory short: #i code: [ self showInventory. ].
         self registerInstruction: #appraise short: #a code: [ #('Instruction not implemented.') displayLines ].
         self registerInstruction: #north short: #n code: [ self movePlayer: #n ].
         self registerInstruction: #east short: #e code: [ self movePlayer: #e ].
@@ -102,6 +102,11 @@ Object subclass: Game [
         (state position tryMove: (Move fromDirection: direction))
             ifTrue: [ (Array with: ('  - Moved ', directionString)) displayLines ]
             ifFalse: [ (Array with: ('  - No money to be made up ', directionString)) displayLines ]
+    ]
+
+    showInventory [
+        <category: 'private'>
+        state inventory show.
     ]
 
     readCommand [

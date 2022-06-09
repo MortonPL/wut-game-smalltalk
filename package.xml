@@ -1,6 +1,7 @@
 <package>
   <name>Ahoy</name>
   <filein>Serialization.st</filein>
+  <filein>Inventory.st</filein>
   <filein>Move.st</filein>
   <filein>Position.st</filein>
   <filein>GameState.st</filein>
