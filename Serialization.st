@@ -1,49 +1,45 @@
-"serialization PoC"
-
 Object subclass: Serializable [
-    | value |
 
     Serializable class >> new [
         <category: 'instance creation'>
-        | obj |
-        obj := super new.
-        obj init.
-        ^obj
+        ^(super new)
     ]
 
-    init [
-        <category: 'initialization'>
-        value := 0
-    ]
-
-    getValue [ ^value ]
-    setValue: v [ value := v ]
-
-    "przykładowe serdle"
-    serialize: stream [ stream nextPutAll: (value printString); nextPut: $| ]
-    deserialize: stream [ value := (stream upTo: $|) asNumber. "asBoolean, asFloat" ]
+    serialize: stream []
+    deserialize: stream []
 ]
 
-b1 := Serializable new.
-b2 := Serializable new.
+Serializable subclass: SerializableString [
+    | string |
 
-b1 setValue: 3.
-b2 setValue: 4.
+    SerializableString class >> new [
+        <category: 'instance creation'>
+        ^SerializableString s: ''
+    ]
 
-filename := 'test'.
-fullname := 'saves/' , filename , '.sav'.
+    SerializableString class >> s: str [
+        <category: 'instance creation'>
+        | o |
+        o := super new.
+        o init: str.
+        ^o
+    ]
 
-(File isAccessible: 'saves') ifFalse: [Directory create: 'saves'].
-stream := FileStream open: fullname mode: FileStream write.
-b1 serialize: stream.
-b2 serialize: stream.
-stream close.
+    init: str [
+        string := str
+    ]
 
-b1 setValue: 1.
-b2 setValue: 2.
+    serialize: stream [
+        stream nextPutAll: string; nextPut: $|; nextPut: $\.
+    ]
 
-(File isReadable: fullname) ifFalse: [Exception signal: 'File doesn''t exist!'].
-stream := FileStream open: fullname mode: FileStream read.
-b1 deserialize: stream.
-b2 deserialize: stream.
-stream close.
+    deserialize: stream [
+        string := (stream upTo: $|).
+        stream upTo: $\.
+    ]
+
+    string [
+        ^string
+    ]
+
+]

@@ -33,7 +33,6 @@ Object subclass: Game [
     instructionsText := #(
         'Available commands are:'
         ''
-        'instructions  -- to see these instructions.'
         'h/help        -- to see this list.'
         'l/look        -- to look around.'
         'i/inventory   -- to check inventory.'
@@ -121,6 +120,10 @@ Object subclass: Game [
     readCommand [
         Transcript nl; show: '> '.
         ^FileStream stdin nextLine
+    ]
+
+    getState [
+        ^state
     ]
 
     "Run the game."

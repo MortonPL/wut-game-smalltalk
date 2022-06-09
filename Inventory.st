@@ -15,6 +15,24 @@ Object subclass: Inventory [
         ^self
     ]
 
+    serialize: stream [
+        content keysAndValuesDo: [:key :value | 
+            stream nextPutAll: key; nextPut: $|;
+                   nextPutAll: (value printString); nextPut: $|
+        ].
+        stream nextPut: $\.
+    ]
+
+    deserialize: stream [
+        | stream2 key value |
+        stream2 := ReadStream on: (stream upTo: $\).
+        [stream2 atEnd] whileFalse: [
+            key := (stream2 upTo: $|).
+            value := (stream2 upTo: $|) asNumber.
+            content at: key put: value
+        ].
+    ]
+
     modify: item by: difference [
         <category: 'mutator'>
         | amount |

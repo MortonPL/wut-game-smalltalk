@@ -1,4 +1,4 @@
-Object subclass: Position [
+Serializable subclass: Position [
     | column row minColumn maxColumn minRow maxRow |
 
     Position class >> new [
@@ -20,6 +20,18 @@ Object subclass: Position [
         r := Position x: horizontal y: vertical.
         r setXLim: horizontalLimits setYLim: verticalLimits.
         ^r
+    ]
+
+    serialize: stream [
+        stream nextPutAll: (column printString); nextPut: $|;
+               nextPutAll: (row printString); nextPut: $|;
+               nextPut: $\.
+    ]
+
+    deserialize: stream [
+        column := (stream upTo: $|) asNumber.
+        row := (stream upTo: $|) asNumber.
+        stream upTo: $\.
     ]
 
     setX: x setY: y [
