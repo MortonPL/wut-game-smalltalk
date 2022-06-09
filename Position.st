@@ -54,6 +54,28 @@ Object subclass: Position [
                 ifFalse: [ false ]
     ]
 
+    column [
+        <category: 'accessor'>
+        ^column
+    ]
+
+    row [
+        <category: 'accessor'>
+        ^row
+    ]
+
+    = position [
+        ^(position column = column) & (position row = row)
+    ]
+
+    - position [
+        ^Move x: (column - position column) y: (row - position row)
+    ]
+
+    hash [
+        ^('Position(', column printString, ',', row printString, ')') hash
+    ]
+
     printOn: stream [
         stream nextPutAll: 'Position ('.
         column printOn: stream.

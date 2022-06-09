@@ -53,13 +53,6 @@ Object subclass: Game [
         'q/quit        -- to end the game and quit.'
     ).
 
-    dirStringMap := Dictionary from: {
-        #n -> 'North'.
-        #e -> 'East'.
-        #w -> 'West'.
-        #s -> 'South'
-    }.
- 
     Game class >> new [
         <category: 'instance creation'>
         | g |
@@ -98,7 +91,7 @@ Object subclass: Game [
     movePlayer: direction [
         <category: 'private'>
         | directionString |
-        directionString := dirStringMap at: direction.
+        directionString := Direction asString: direction.
         (state position tryMove: (Move fromDirection: direction))
             ifTrue: [ (Array with: ('  - Moved ', directionString)) displayLines ]
             ifFalse: [ (Array with: ('  - No money to be made up ', directionString)) displayLines ]
