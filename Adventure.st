@@ -52,6 +52,13 @@ Object subclass: Game [
         'd/load <file> -- to load the game.'
         'q/quit        -- to end the game and quit.'
     ).
+
+    dirStringMap := Dictionary from: {
+        #n -> 'North'.
+        #e -> 'East'.
+        #w -> 'West'.
+        #s -> 'South'
+    }.
  
     Game class >> new [
         <category: 'instance creation'>
@@ -72,28 +79,29 @@ Object subclass: Game [
         state := GameState new.
 
         instructionMap := Dictionary new.
-        self registerInstruction: #help short: #h code: [ instructionsText printLines ].
-        self registerInstruction: #look short: #l code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #inventory short: #i code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #appraise short: #a code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #help short: #h code: [ instructionsText displayLines ].
+        self registerInstruction: #look short: #l code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #inventory short: #i code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #appraise short: #a code: [ #('Instruction not implemented.') displayLines ].
         self registerInstruction: #north short: #n code: [ self movePlayer: #n ].
         self registerInstruction: #east short: #e code: [ self movePlayer: #e ].
         self registerInstruction: #south short: #s code: [ self movePlayer: #s ].
         self registerInstruction: #west short: #w code: [ self movePlayer: #w ].
-        self registerInstruction: #buy short: #b code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #sell short: #z code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #ask short: #k code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #save short: #v code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #load short: #d code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #buy short: #b code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #sell short: #z code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #ask short: #k code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #save short: #v code: [ #('Instruction not implemented.') displayLines ].
+        self registerInstruction: #load short: #d code: [ #('Instruction not implemented.') displayLines ].
         self registerInstruction: #quit short: #q code: [ isOver := true ]
     ]
 
     movePlayer: direction [
         <category: 'private'>
-        [ state position + (Move fromDirection: direction) ]
-            on: FallingOffTheEdgeOfTheWorld
-            do: [ :sig | sig return: nil ].
-        "debug" state position printNl
+        | directionString |
+        directionString := dirStringMap at: direction.
+        (state position tryMove: (Move fromDirection: direction))
+            ifTrue: [ (Array with: ('  - Moved ', directionString)) displayLines ]
+            ifFalse: [ (Array with: ('  - No money to be made up ', directionString)) displayLines ]
     ]
 
     readCommand [
@@ -104,14 +112,14 @@ Object subclass: Game [
     "Run the game."
     run [
         | cmd isUnknown action |
-        introductionText printLines.
-        instructionsText printLines.
+        introductionText displayLines.
+        instructionsText displayLines.
 
         "Game loop."
         [ isOver ] whileFalse: [
             isUnknown := true.
             cmd := self readCommand.
-            action := instructionMap at: (cmd asSymbol) ifAbsent: [ [ #('Unknown command.') printLines ] ].
+            action := instructionMap at: (cmd asSymbol) ifAbsent: [ [ #('Unknown command.') displayLines ] ].
             action value
         ]
     ]
