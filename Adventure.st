@@ -27,7 +27,7 @@ Object subclass: Game [
         '    ^^^  ~~   ^^^^     ^^~    ~~~~'
         ' ~~      ~~^^      ^~^     ~~         ^~^'
         ''
-        '        by Hocki Klocki Sygocki, 2022'
+        '        by B.Moroz,J.Motyka,D.Sygocki, 2022'
     ).
 
     instructionsText := #(
