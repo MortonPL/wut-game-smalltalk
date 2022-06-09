@@ -7,6 +7,7 @@
   <filein>Position.st</filein>
   <filein>Merchant.st</filein>
   <filein>Tile.st</filein>
+  <filein>Map.st</filein>
   <filein>GameState.st</filein>
   <filein>Adventure.st</filein>
   <filein>Pirates.st</filein>
