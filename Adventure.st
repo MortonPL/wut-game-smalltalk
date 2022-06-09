@@ -72,7 +72,7 @@ Object subclass: Game [
 
         instructionMap := Dictionary new.
         self registerInstruction: #help short: #h code: [ instructionsText displayLines. ].
-        self registerInstruction: #look short: #l code: [ 'Instruction not implemented.' displayNl. ].
+        self registerInstruction: #look short: #l code: [ self lookAround. ].
         self registerInstruction: #inventory short: #i code: [ self showInventory. ].
         self registerInstruction: #appraise short: #a code: [ self appraiseItem: 'balls'. ].
         self registerInstruction: #north short: #n code: [ self movePlayer: #n. ].
@@ -96,6 +96,7 @@ Object subclass: Game [
                 Array with: ('  - Moved ', directionString) displayNl.
                 self tryStorm: direction.
                 self tryPirates.
+                self lookAround.
             ]
             ifFalse: [ Array with: ('  - No money to be made up ', directionString) displayNl. ]
     ]
@@ -108,6 +109,13 @@ Object subclass: Game [
     appraiseItem: item [
         <category: 'private'>
         state inventory appraise: item.
+    ]
+
+    lookAround [
+        <category: 'private'>
+        | position |
+        position := state position.
+        map lookAround: position.
     ]
 
     readCommand [

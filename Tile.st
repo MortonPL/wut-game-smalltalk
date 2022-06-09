@@ -1,31 +1,17 @@
 Object subclass: Tile [
-    | pos |
-
-    Tile class >> new: aPosition [
+    Tile class >> new [
         <category: 'instance creation'>
         | r |
         r := super new.
-        r init: aPosition.
         ^r
-    ]
-
-    init: aPosition [
-        <category: 'initialization'>
-        pos := aPosition
-    ]
-
-    describeFrom: aPosition [
-        ^aPosition = pos
-            ifTrue: [ self describeCurrent ]
-            ifFalse: [ self describeRemote: (Direction asString: ((pos - aPosition) asDirection)) ]
     ]
 ]
 
 Tile subclass: ShallowWater [
-    ShallowWater class >> new: aPosition [
+    ShallowWater class >> new [
         <category: 'instance creation'>
         | r |
-        r := super new: aPosition.
+        r := super new.
         ^r
     ]
 
@@ -34,17 +20,17 @@ Tile subclass: ShallowWater [
         ^'You are on a calm sea'
     ]
 
-    describeRemote: aString [
+    describeRemote [
         <category: 'private'>
-        ^'You see a calm sea ', aString
+        ^'You see a calm sea'
     ]
 ]
 
 Tile subclass: DeepWater [
-    DeepWater class >> new: aPosition [
+    DeepWater class >> new [
         <category: 'instance creation'>
         | r |
-        r := super new: aPosition.
+        r := super new.
         ^r
     ]
 
@@ -53,19 +39,19 @@ Tile subclass: DeepWater [
         ^'The sea is unsteady. Your ship could be blown away at any moment...'
     ]
 
-    describeRemote: aString [
+    describeRemote [
         <category: 'private'>
-        ^'You see the ocean raging ', aString
+        ^'You see the ocean raging'
     ]
 ]
 
 Tile subclass: Island [
     | name merchant |
 
-    Island class >> new: aPosition called: aString occupiedBy: aMerchant [
+    Island class >> new: aString occupiedBy: aMerchant [
         <category: 'instance creation'>
         | r |
-        r := super new: aPosition.
+        r := super new.
         r init: aString occupiedBy: aMerchant.
         ^r
     ]
@@ -80,8 +66,27 @@ Tile subclass: Island [
         ^'You are on the ', name, '. Rumours are you can trade with ', (merchant name), ' here. You gotta ask them'
     ]
 
-    describeRemote: aString [
+    describeRemote [
         <category: 'private'>
-        ^'You spot a piece of land ', aString
+        ^'You spot a piece of land'
+    ]
+]
+
+Tile subclass: OutOfBounds [
+    OutOfBounds class >> new [
+        <category: 'instance creation'>
+        | r |
+        r := super new.
+        ^r
+    ]
+
+    describeCurrent [
+        <category: 'private'>
+        ^'Out of bounds'
+    ]
+
+    describeRemote [
+        <category: 'private'>
+        ^'Out of bounds'
     ]
 ]
