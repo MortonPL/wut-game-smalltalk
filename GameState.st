@@ -13,6 +13,12 @@ Object subclass: GameState [
         <category: 'initialization'>
         playerName := 'foe'.
         position := Position new.
+        position setXLim: #(0 6) setYLim: #(0 6).
         inventory := nil
+    ]
+
+    position [
+        <category: 'accessor'>
+        ^position
     ]
 ]

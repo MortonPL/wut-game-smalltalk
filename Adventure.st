@@ -12,7 +12,7 @@ Collaborators:
 * ..."
 
 Object subclass: Game [
-    | isGameOver instructionMap |
+    | state isOver instructionMap |
 
     introductionText := #(
         '+=======================================+'
@@ -68,23 +68,32 @@ Object subclass: Game [
 
     init [
         <category: 'initialization'>
-        isGameOver := false.
+        isOver := false.
+        state := GameState new.
 
         instructionMap := Dictionary new.
         self registerInstruction: #help short: #h code: [ instructionsText printLines ].
         self registerInstruction: #look short: #l code: [ #('Instruction not implemented.') printLines ].
         self registerInstruction: #inventory short: #i code: [ #('Instruction not implemented.') printLines ].
         self registerInstruction: #appraise short: #a code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #north short: #n code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #east short: #e code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #south short: #s code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #west short: #w code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #north short: #n code: [ self movePlayer: #n ].
+        self registerInstruction: #east short: #e code: [ self movePlayer: #e ].
+        self registerInstruction: #south short: #s code: [ self movePlayer: #s ].
+        self registerInstruction: #west short: #w code: [ self movePlayer: #w ].
         self registerInstruction: #buy short: #b code: [ #('Instruction not implemented.') printLines ].
         self registerInstruction: #sell short: #z code: [ #('Instruction not implemented.') printLines ].
         self registerInstruction: #ask short: #k code: [ #('Instruction not implemented.') printLines ].
         self registerInstruction: #save short: #v code: [ #('Instruction not implemented.') printLines ].
         self registerInstruction: #load short: #d code: [ #('Instruction not implemented.') printLines ].
-        self registerInstruction: #quit short: #q code: [ isGameOver := true ]
+        self registerInstruction: #quit short: #q code: [ isOver := true ]
+    ]
+
+    movePlayer: direction [
+        <category: 'private'>
+        [ state position + (Move fromDirection: direction) ]
+            on: FallingOffTheEdgeOfTheWorld
+            do: [ :sig | sig return: nil ].
+        "debug" state position printNl
     ]
 
     readCommand [
@@ -99,11 +108,11 @@ Object subclass: Game [
         instructionsText printLines.
 
         "Game loop."
-        [isGameOver] whileFalse: [
+        [ isOver ] whileFalse: [
             isUnknown := true.
             cmd := self readCommand.
             action := instructionMap at: (cmd asSymbol) ifAbsent: [ [ #('Unknown command.') printLines ] ].
-            action value.
+            action value
         ]
     ]
 ]
