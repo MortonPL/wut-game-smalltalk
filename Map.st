@@ -17,7 +17,7 @@ Object subclass: Map [
         }.
         islands := {
             Island new: (Position x: 4 y: 1) called: 'Northstable Island' occupiedBy: (merchants at: 1).
-            Island new: (Position x: 3 y: 3) called: 'Storm Reef' occupiedBy: (merchants at: 2).
+            Island new: (Position x: 3 y: 3) called: 'Storm Reef'         occupiedBy: (merchants at: 2).
             Island new: (Position x: 1 y: 4) called: 'White Tiger Island' occupiedBy: (merchants at: 3).
             Island new: (Position x: 5 y: 6) called: 'Bishop Rock Island' occupiedBy: (merchants at: 4)
         }.
