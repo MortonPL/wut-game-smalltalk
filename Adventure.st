@@ -12,7 +12,7 @@ Collaborators:
 * ..."
 
 Object subclass: Game [
-    | isGameOver |
+    | isGameOver instructionMap |
 
     introductionText := #(
         '+=======================================+'
@@ -31,15 +31,26 @@ Object subclass: Game [
         ' ~~      ~~^^      ^~^     ~~         ^~^'
         ''
         '        by B.Moroz,J.Motyka,D.Sygocki, 2022'
-        ''
     ).
 
     instructionsText := #(
         'Available commands are:'
         ''
         'instructions  -- to see these instructions.'
-        'quit          -- to end the game and quit.'
-        ''
+        'h/help        -- to see this list.'
+        'l/look        -- to look around.'
+        'i/inventory   -- to check inventory.'
+        'a/appraise    -- to appraise items.'
+        'n/north       -- to go north.'
+        'e/east        -- to go east.'
+        's/south       -- to go south.'
+        'w/west        -- to go west.'
+        'b/buy         -- to buy items.'
+        's/sell        -- to sell items.'
+        'k/ask         -- to ask questions.'
+        'v/save <file> -- to save the game.'
+        'd/load <file> -- to load the game.'
+        'q/quit        -- to end the game and quit.'
     ).
  
     Game class >> new [
@@ -50,55 +61,49 @@ Object subclass: Game [
         ^g
     ]
 
+    registerInstruction: longName short: shortName code: block [
+        <category: 'private'>
+        instructionMap at: shortName put: (instructionMap at: longName put: block)
+    ]
+
     init [
         <category: 'initialization'>
-        isGameOver := false
-    ]
+        isGameOver := false.
 
-    "Print strings from array in separate lines."
-    printLines: anArray [
-        anArray do: [ :string | Transcript show: string; cr ]
-    ]
-
-    printIntroduction [
-        self printLines: introductionText.
-    ]
-
-    printInstructions [
-        self printLines: instructionsText.
+        instructionMap := Dictionary new.
+        self registerInstruction: #help short: #h code: [ instructionsText printLines ].
+        self registerInstruction: #look short: #l code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #inventory short: #i code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #appraise short: #a code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #north short: #n code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #east short: #e code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #south short: #s code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #west short: #w code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #buy short: #b code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #sell short: #z code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #ask short: #k code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #save short: #v code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #load short: #d code: [ #('Instruction not implemented.') printLines ].
+        self registerInstruction: #quit short: #q code: [ isGameOver := true ]
     ]
 
     readCommand [
-        Transcript show: '> '.
+        Transcript nl; show: '> '.
         ^FileStream stdin nextLine
     ]
 
     "Run the game."
     run [
-        | cmd isUnknown |
-
-        self printIntroduction.
-        self printInstructions.
+        | cmd isUnknown action |
+        introductionText printLines.
+        instructionsText printLines.
 
         "Game loop."
         [isGameOver] whileFalse: [
-
             isUnknown := true.
             cmd := self readCommand.
-
-            cmd = 'instructions' ifTrue: [
-                self printInstructions.
-                isUnknown := false
-            ].
-
-            cmd = 'quit' ifTrue: [
-                isGameOver := true.
-                isUnknown := false
-            ].
-                
-            isUnknown ifTrue: [
-                self printLines: #('Unknown command.' '')
-            ]
+            action := instructionMap at: (cmd asSymbol) ifAbsent: [ [ #('Unknown command.') printLines ] ].
+            action value.
         ]
     ]
 ]
