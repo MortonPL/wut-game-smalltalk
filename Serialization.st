@@ -47,6 +47,3 @@ stream := FileStream open: fullname mode: FileStream read.
 b1 deserialize: stream.
 b2 deserialize: stream.
 stream close.
-
-b1 getValue printNl.
-b2 getValue printNl.

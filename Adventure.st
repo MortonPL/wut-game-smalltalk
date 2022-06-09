@@ -1,6 +1,3 @@
-"The germ of a text adventure game
-Marcin Szlenk 2022"
-
 "Game class
 
 Responsibilities:
@@ -200,4 +197,5 @@ Object subclass: Game [
     ]
 ]
 
+((Map new) atX: 5 atY: 6) printNl.
 Game new run.
