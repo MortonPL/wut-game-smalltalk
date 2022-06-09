@@ -16,7 +16,7 @@ Object subclass: Merchant [
     ]
 
     ask: topic [
-        topic asSymbol = #offer ifTrue: [ offer printLn ]
+        topic asSymbol = #offer ifTrue: [ offer printNl ]
     ]
 
     sells: itemName [

@@ -74,13 +74,13 @@ Object subclass: Game [
         self registerInstruction: #look short: #l code: [ self lookAround. ].
         self registerInstruction: #inventory short: #i code: [ self showInventory. ].
         self registerInstruction: #appraise short: #a code: [ :args | self appraiseItem: (args at: 1). ].
-        self registerInstruction: #ask short: #k code: [ :args | self askAbout: (args at: 1). ].
         self registerInstruction: #north short: #n code: [ self movePlayer: #n. ].
         self registerInstruction: #east short: #e code: [ self movePlayer: #e. ].
         self registerInstruction: #south short: #s code: [ self movePlayer: #s. ].
         self registerInstruction: #west short: #w code: [ self movePlayer: #w. ].
         self registerInstruction: #buy short: #b code: [ :args | self buyItem: (args at: 1) quantity: (args at: 2). ].
         self registerInstruction: #sell short: #z code: [ :args | self sellItem: (args at: 1) quantity: (args at: 2). ].
+        self registerInstruction: #ask short: #k code: [ :args | self askAbout: (args at: 1). ].
         self registerInstruction: #save short: #v code: [ :args | self saveStateTo: (args at: 1). ].
         self registerInstruction: #load short: #d code: [ :args | self loadStateFrom: (args at: 1). ].
         self registerInstruction: #quit short: #q code: [ isOver := true ]
@@ -119,9 +119,10 @@ Object subclass: Game [
 
     buyItem: itemName quantity: anInteger [
         <category: 'private'>
-        | tile merchant unitPrice totalPrice coins |
+        | position tile merchant unitPrice totalPrice coins |
+        position := state position.
         anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
-        tile := (map atX: position column atY: position row).
+        tile := map atX: (position column) atY: (position row).
         tile isLand ifFalse: [ ^'There is no merchant here' displayNl ].
         merchant := tile merchant.
         merchant sells: itemName ifFalse: [ ^(merchant name, ' has no ', itemName, ' in stock') displayNl ].
@@ -136,9 +137,10 @@ Object subclass: Game [
 
     sellItem: itemName quantity: anInteger [
         <category: 'private'>
-        | tile merchant unitPrice totalPrice items |
+        | position tile merchant unitPrice totalPrice items |
+        position := state position.
         anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
-        tile := (map atX: position column atY: position row).
+        tile := map atX: (position column) atY: (position row).
         tile isLand ifFalse: [ ^'There is no merchant here' displayNl ].
         merchant := tile merchant.
         merchant buys: itemName ifFalse: [ ^(merchant name, ' doesn''t want your ', itemName) displayNl ].
@@ -154,7 +156,9 @@ Object subclass: Game [
 
     askAbout: topic [
         <category: 'private'>
-        tile := (map atX: position column atY: position row).
+        | position tile |
+        position := state position.
+        tile := map atX: (position column) atY: (position row).
         tile isLand ifFalse: [ ^'There is nobody to ask' displayNl ].
         tile merchant ask: topic.
     ]
