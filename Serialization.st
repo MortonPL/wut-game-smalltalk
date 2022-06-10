@@ -1,15 +1,18 @@
 Object subclass: Serializable [
     Serializable class >> new [
         <category: 'instance creation'>
+        <comment: 'Abstraction.'>
         ^(super new)
     ]
 
     serialize: stream [
         <category: 'serde'>
+        self subclassResponsibility
     ]
 
     deserialize: stream [
         <category: 'serde'>
+        self subclassResponsibility
     ]
 ]
 

@@ -134,7 +134,7 @@ Object subclass: Game [
         position := state position.
         anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
         tile := map atX: (position column) atY: (position row).
-        tile isLand ifFalse: [ ^'There is no merchant here' displayNl ].
+        (tile isKindOf Island) ifFalse: [ ^'There is no merchant here' displayNl ].
         merchant := tile merchant.
         merchant sells: itemName ifFalse: [ ^(merchant name, ' has no ', itemName, ' in stock') displayNl ].
         unitPrice := merchant offer sellingPriceForSingle: itemName.
@@ -153,7 +153,7 @@ Object subclass: Game [
         position := state position.
         anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
         tile := map atX: (position column) atY: (position row).
-        tile isLand ifFalse: [ ^'There is no merchant here' displayNl ].
+        (tile isKindOf Island) ifFalse: [ ^'There is no merchant here' displayNl ].
         merchant := tile merchant.
         merchant buys: itemName ifFalse: [ ^(merchant name, ' doesn''t want your ', itemName) displayNl ].
         items := state inventory count: itemName.
@@ -172,7 +172,7 @@ Object subclass: Game [
         | position tile |
         position := state position.
         tile := map atX: (position column) atY: (position row).
-        tile isLand ifFalse: [ ^'There is nobody to ask' displayNl ].
+        (tile isKindOf Island) ifFalse: [ ^'There is nobody to ask' displayNl ].
         tile merchant ask: topic.
     ]
 

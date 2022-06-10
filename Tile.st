@@ -1,20 +1,21 @@
 Object subclass: Tile [
     Tile class >> new [
         <category: 'instance creation'>
+        <comment: 'Abstraction.'>
         | r |
         r := super new.
         ^r
     ]
 
     describeCurrent [
+        <category: 'helper'>
+        <comment: 'Describes the tile here.'>
         self subclassResponsibility
     ]
 
     describeRemote [
-        self subclassResponsibility
-    ]
-
-    isLand [
+        <category: 'helper'>
+        <comment: 'Describes the tile away.'>
         self subclassResponsibility
     ]
 ]
@@ -22,12 +23,15 @@ Object subclass: Tile [
 Tile subclass: ShallowWater [
     ShallowWater class >> new [
         <category: 'instance creation'>
+        <comment: 'Creates ShallowWater tile instance.'>
         | r |
         r := super new.
         ^r
     ]
 
     describeCurrent [
+        <category: 'helper'>
+        <comment: 'Describes the tile here.'>
         ^'You are on a calm sea.'
     ]
 
@@ -38,26 +42,27 @@ Tile subclass: ShallowWater [
     }.
 
     describeRemote [
+        <category: 'helper'>
+        <comment: 'Describes the tile away.'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
         ^remoteMessages at: random
-    ]
-
-    isLand [
-        ^false
     ]
 ]
 
 Tile subclass: DeepWater [
     DeepWater class >> new [
         <category: 'instance creation'>
+        <comment: 'Creates DeepWater tile instance.'>
         | r |
         r := super new.
         ^r
     ]
 
     describeCurrent [
+        <category: 'helper'>
+        <comment: 'Describes the tile here.'>
         ^'The sea is unsteady. Your ship could be blown away at any moment...'
     ]
 
@@ -68,14 +73,12 @@ Tile subclass: DeepWater [
     }.
 
     describeRemote [
+        <category: 'helper'>
+        <comment: 'Describes the tile away.'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
         ^remoteMessages at: random
-    ]
-
-    isLand [
-        ^false
     ]
 ]
 
@@ -84,6 +87,7 @@ Tile subclass: Island [
 
     Island class >> new: aString occupiedBy: aMerchant [
         <category: 'instance creation'>
+        <comment: 'Creates Island tile instance.'>
         | r |
         r := super new.
         r init: aString occupiedBy: aMerchant.
@@ -91,11 +95,15 @@ Tile subclass: Island [
     ]
 
     init: aString occupiedBy: aMerchant [
+        <category: 'initialization'>
+        <comment: 'Initializes Island tile instance with name and merchant.'>
         name := aString.
         merchant := aMerchant
     ]
 
     describeCurrent [
+        <category: 'helper'>
+        <comment: 'Describes the tile here.'>
         ^'You are on the ', name, '. Rumours are you can trade with ', (merchant name), ' here. You gotta ask them.'
     ]
 
@@ -106,6 +114,8 @@ Tile subclass: Island [
     }.
 
     describeRemote [
+        <category: 'helper'>
+        <comment: 'Describes the tile away.'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
@@ -113,23 +123,24 @@ Tile subclass: Island [
     ]
 
     merchant [
+        <category: 'accessor'>
+        <comment: 'Returns the merchant.'>
         ^merchant
-    ]
-
-    isLand [
-        ^true
     ]
 ]
 
 Tile subclass: OutOfBounds [
     OutOfBounds class >> new [
         <category: 'instance creation'>
+        <comment: 'Creates OutOfBounds tile instance.'>
         | r |
         r := super new.
         ^r
     ]
 
     describeCurrent [
+        <category: 'helper'>
+        <comment: 'Describes the tile here.'>
         ^'Out of bounds.'
     ]
 
@@ -140,13 +151,11 @@ Tile subclass: OutOfBounds [
     }.
 
     describeRemote [
+        <category: 'helper'>
+        <comment: 'Describes the tile away.'>
         | rng random |
         rng := Random new.
         random := rng between: 1 and: 3.
         ^remoteMessages at: random
-    ]
-
-    isLand [
-        ^false
     ]
 ]
