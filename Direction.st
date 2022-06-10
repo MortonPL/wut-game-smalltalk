@@ -11,6 +11,8 @@ Object subclass: Direction [
     }.
 
     Direction class >> asString: aSymbol [
+        <category: 'accessor'>
+        <comment: 'Returns the name of a symbolic direction.'>
         ^dirStringMap at: aSymbol
     ]
 ]

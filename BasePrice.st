@@ -9,6 +9,8 @@ Object subclass: BasePrice [
     }.
 
     BasePrice class >> for: itemName [
+        <category: 'accessor'>
+        <comment: 'Returns the price of an item.'>
         ^prices at: itemName asSymbol
             ifAbsent: [ SystemExceptions.InvalidArgument signalOn: itemName reason: 'Item not found' ]
     ]
