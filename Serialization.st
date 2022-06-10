@@ -1,12 +1,16 @@
 Object subclass: Serializable [
-
     Serializable class >> new [
         <category: 'instance creation'>
         ^(super new)
     ]
 
-    serialize: stream []
-    deserialize: stream []
+    serialize: stream [
+        <category: 'serde'>
+    ]
+
+    deserialize: stream [
+        <category: 'serde'>
+    ]
 ]
 
 Serializable subclass: SerializableString [
@@ -14,11 +18,13 @@ Serializable subclass: SerializableString [
 
     SerializableString class >> new [
         <category: 'instance creation'>
+        <comment: 'Creates a string instance.'>
         ^SerializableString s: ''
     ]
 
     SerializableString class >> s: str [
         <category: 'instance creation'>
+        <comment: 'Creates a string instance with given string.'>
         | o |
         o := super new.
         o init: str.
@@ -26,20 +32,25 @@ Serializable subclass: SerializableString [
     ]
 
     init: str [
+        <category: 'initialization'>
+        <comment: 'Initializes a string instance.'>
         string := str
     ]
 
     serialize: stream [
+        <category: 'serde'>
         stream nextPutAll: string; nextPut: $|; nextPut: $\.
     ]
 
     deserialize: stream [
+        <category: 'serde'>
         string := (stream upTo: $|).
         stream upTo: $\.
     ]
 
     string [
+        <category: 'accessor'>
+        <comment: 'Returns the inner string'>
         ^string
     ]
-
 ]
