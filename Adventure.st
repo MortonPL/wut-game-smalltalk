@@ -220,7 +220,8 @@ Object subclass: Game [
 
         [ isOver ] whileFalse: [
             tokens := self readCommand tokenize: ' '.
-            self command: (tokens at: 1) with: (tokens allButFirst).
+            (tokens size > 0)
+                ifTrue: [ self command: (tokens at: 1) with: (tokens allButFirst). ].
         ]
     ]
 ]
