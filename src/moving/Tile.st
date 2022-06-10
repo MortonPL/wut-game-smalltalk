@@ -1,12 +1,6 @@
-Object subclass: Tile [
-    Tile class >> new [
-        <category: 'instance creation'>
-        <comment: 'Abstraction.'>
-        | r |
-        r := super new.
-        ^r
-    ]
+"Tile interface"
 
+Object subclass: Tile [
     describeCurrent [
         <category: 'helper'>
         <comment: 'Describes the tile here.'>
@@ -20,13 +14,18 @@ Object subclass: Tile [
     ]
 ]
 
+
+"ShallowWater class
+
+Responsibilities:
+* represent a shallow water Tile
+* describe itself"
+
 Tile subclass: ShallowWater [
     ShallowWater class >> new [
         <category: 'instance creation'>
         <comment: 'Creates ShallowWater tile instance.'>
-        | r |
-        r := super new.
-        ^r
+        ^super new
     ]
 
     describeCurrent [
@@ -51,13 +50,18 @@ Tile subclass: ShallowWater [
     ]
 ]
 
+
+"DeepWater class
+
+Responsibilities:
+* represent a deep water Tile
+* describe itself"
+
 Tile subclass: DeepWater [
     DeepWater class >> new [
         <category: 'instance creation'>
         <comment: 'Creates DeepWater tile instance.'>
-        | r |
-        r := super new.
-        ^r
+        ^super new
     ]
 
     describeCurrent [
@@ -82,16 +86,20 @@ Tile subclass: DeepWater [
     ]
 ]
 
+
+"Island class
+
+Responsibilities:
+* represent an island Tile
+* describe itself"
+
 Tile subclass: Island [
     | name merchant |
 
     Island class >> new: aString occupiedBy: aMerchant [
         <category: 'instance creation'>
         <comment: 'Creates Island tile instance.'>
-        | r |
-        r := super new.
-        r init: aString occupiedBy: aMerchant.
-        ^r
+        ^(super new) init: aString occupiedBy: aMerchant; yourself
     ]
 
     init: aString occupiedBy: aMerchant [
@@ -129,13 +137,18 @@ Tile subclass: Island [
     ]
 ]
 
+
+"OutOfBounds class
+
+Responsibilities:
+* represent an inaccessible Tile
+* describe itself"
+
 Tile subclass: OutOfBounds [
     OutOfBounds class >> new [
         <category: 'instance creation'>
         <comment: 'Creates OutOfBounds tile instance.'>
-        | r |
-        r := super new.
-        ^r
+        ^super new
     ]
 
     describeCurrent [

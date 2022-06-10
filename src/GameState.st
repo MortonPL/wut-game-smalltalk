@@ -1,13 +1,15 @@
+"Inventory class
+
+Responsibilities:
+* store the game state (Player's name, Position, Inventory)"
+
 Object subclass: GameState [
     | playerName position inventory |
 
     GameState class >> new [
         <category: 'instance creation'>
         <comment: 'Creates a game state instance.'>
-        | r |
-        r := super new.
-        r init.
-        ^r
+        ^(super new) init; yourself
     ]
 
     init [
@@ -22,6 +24,7 @@ Object subclass: GameState [
 
     serialize: stream [
         <category: 'serde'>
+        <comment: 'Serializes the instance to a stream.'>
         playerName serialize: stream.
         position serialize: stream.
         inventory serialize: stream
@@ -29,6 +32,7 @@ Object subclass: GameState [
 
     deserialize: stream [
         <category: 'serde'>
+        <comment: 'Deserializes the instance from a stream.'>
         playerName deserialize: stream.
         position deserialize: stream.
         inventory deserialize: stream

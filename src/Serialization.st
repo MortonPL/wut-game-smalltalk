@@ -1,20 +1,24 @@
-Object subclass: Serializable [
-    Serializable class >> new [
-        <category: 'instance creation'>
-        <comment: 'Abstraction.'>
-        ^(super new)
-    ]
+"Serializable interface"
 
+Object subclass: Serializable [
     serialize: stream [
         <category: 'serde'>
+        <comment: 'Serializes the instance to a stream.'>
         self subclassResponsibility
     ]
 
     deserialize: stream [
         <category: 'serde'>
+        <comment: 'Deserializes the instance from a stream.'>
         self subclassResponsibility
     ]
 ]
+
+
+"SerializableString class
+
+Responsibilities:
+* serialize/deserialize wrapped string"
 
 Serializable subclass: SerializableString [
     | string |
@@ -28,10 +32,7 @@ Serializable subclass: SerializableString [
     SerializableString class >> s: str [
         <category: 'instance creation'>
         <comment: 'Creates a string instance with given string.'>
-        | o |
-        o := super new.
-        o init: str.
-        ^o
+        ^(super new) init: str; yourself
     ]
 
     init: str [
@@ -42,11 +43,13 @@ Serializable subclass: SerializableString [
 
     serialize: stream [
         <category: 'serde'>
+        <comment: 'Serializes the instance to a stream.'>
         stream nextPutAll: string; nextPut: $|; nextPut: $\.
     ]
 
     deserialize: stream [
         <category: 'serde'>
+        <comment: 'Deserializes the instance from a stream.'>
         string := (stream upTo: $|).
         stream upTo: $\.
     ]

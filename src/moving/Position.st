@@ -1,3 +1,9 @@
+"Position class
+
+Responsibilities:
+* represent a position on the world Map
+* describe itself"
+
 Serializable subclass: Position [
     | column row minColumn maxColumn minRow maxRow |
 
@@ -10,23 +16,18 @@ Serializable subclass: Position [
     Position class >> x: horizontal y: vertical [
         <category: 'instance creation'>
         <comment: 'Creates a position instance from coordinates.'>
-        | r |
-        r := super new.
-        r setX: horizontal setY: vertical.
-        ^r
+        ^(super new) setX: horizontal setY: vertical; yourself
     ]
 
     Position class >> x: horizontal y: vertical xLim: horizontalLimits yLim: verticalLimits [
         <category: 'instance creation'>
         <comment: 'Creates a move instance from coordinates with limits.'>
-        | r |
-        r := Position x: horizontal y: vertical.
-        r setXLim: horizontalLimits setYLim: verticalLimits.
-        ^r
+        ^(Position x: horizontal y: vertical) setXLim: horizontalLimits setYLim: verticalLimits; yourself
     ]
 
     serialize: stream [
         <category: 'serde'>
+        <comment: 'Serializes the instance to a stream.'>
         stream nextPutAll: (column printString); nextPut: $|;
                nextPutAll: (row printString); nextPut: $|;
                nextPut: $\.
@@ -34,6 +35,7 @@ Serializable subclass: Position [
 
     deserialize: stream [
         <category: 'serde'>
+        <comment: 'Deserializes the instance from a stream.'>
         column := (stream upTo: $|) asNumber.
         row := (stream upTo: $|) asNumber.
         stream upTo: $\.
@@ -87,24 +89,6 @@ Serializable subclass: Position [
         <category: 'accessor'>
         <comment: 'Returns the y component.'>
         ^row
-    ]
-
-    = position [
-        <category: 'operator'>
-        <comment: 'Comparison operator.'>
-        ^(position column = column) & (position row = row)
-    ]
-
-    - position [
-        <category: 'operator'>
-        <comment: 'Subtraction operator.'>
-        ^Move x: (column - position column) y: (row - position row)
-    ]
-
-    hash [
-        <category: 'operator'>
-        <comment: 'Hashing function.'>
-        ^('Position(', column printString, ',', row printString, ')') hash
     ]
 
     printOn: stream [

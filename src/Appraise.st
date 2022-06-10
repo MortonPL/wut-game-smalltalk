@@ -1,14 +1,14 @@
 Inventory extend [
     descriptions := Dictionary from: {
-        'rum' -> 'Would be delicious with Cola, if I knew what that was.'.
-        'gunpowder' -> 'Let''s hope it doesn''t explode.'.
+        'rum'         -> 'Would be delicious with Cola, if I knew what that was.'.
+        'gunpowder'   -> 'Let''s hope it doesn''t explode.'.
         'blunderbuss' -> 'I like to call it the Blunderbussy.'.
-        'ration' -> 'Meat so dry you can rip pants with it.'.
-        'banana' -> 'A source of comedy. Especially when rotated.'.
+        'ration'      -> 'Meat so dry you can rip pants with it.'.
+        'banana'      -> 'A source of comedy. Especially when rotated.'.
         'map_piece_1' -> 'A map piece that appears to be torn in half. Maybe I can find the other piece if I ask merchants?'.
         'map_piece_2' -> 'A map piece that appears to be torn in half. Maybe the pirates know something about the other piece?'.
-        'mercenary' -> 'The power of Sun Tzu in the palm of your hand. Reduces pirate attacks and deflects them.'.
-        'coin' -> 'Local currency. I think it''s named ''Kromer''?'
+        'mercenary'   -> 'The power of Sun Tzu in the palm of your hand. Reduces pirate attacks and deflects them.'.
+        'coin'        -> 'Local currency. I think it''s named ''Kromer''?'
     }.
 
     missingItemMessage := {

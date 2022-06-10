@@ -1,3 +1,9 @@
+"Offer class
+
+Responsibilities:
+* provide information on sold/bought goods and their price modifiers
+* describe itself"
+
 Object subclass: Offer [
     | buying selling |
 

@@ -1,13 +1,14 @@
+"Direction class
+
+Responsibilities:
+* map symbolic directions to their full names"
+
 Object subclass: Direction [
     dirStringMap := Dictionary from: {
-        'nw' -> 'Northwest'.
         'n' -> 'North'.
-        'ne' -> 'Northeast'.
         'e' -> 'East'.
         'w' -> 'West'.
-        'sw' -> 'Southwest'.
-        's' -> 'South'.
-        'se' -> 'Southeast'
+        's' -> 'South'
     }.
 
     Direction class >> asString: aSymbol [

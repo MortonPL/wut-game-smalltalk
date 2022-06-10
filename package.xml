@@ -1,20 +1,21 @@
 <package>
   <name>Ahoy</name>
-  <filein>Serialization.st</filein>
-  <filein>Inventory.st</filein>
-  <filein>Appraise.st</filein>
-  <filein>Direction.st</filein>
-  <filein>Move.st</filein>
-  <filein>Position.st</filein>
-  <filein>BasePrice.st</filein>
-  <filein>Offer.st</filein>
-  <filein>Merchant.st</filein>
-  <filein>Tile.st</filein>
-  <filein>Map.st</filein>
-  <filein>Look.st</filein>
-  <filein>GameState.st</filein>
-  <filein>Adventure.st</filein>
-  <filein>Pirates.st</filein>
-  <filein>Storm.st</filein>
+  <filein>src/Serialization.st</filein>
+  <filein>src/Inventory.st</filein>
+  <filein>src/Appraise.st</filein>
+  <filein>src/moving/Direction.st</filein>
+  <filein>src/moving/Move.st</filein>
+  <filein>src/moving/Position.st</filein>
+  <filein>src/trading/BasePrice.st</filein>
+  <filein>src/trading/Offer.st</filein>
+  <filein>src/trading/Merchant.st</filein>
+  <filein>src/moving/Tile.st</filein>
+  <filein>src/moving/Map.st</filein>
+  <filein>src/moving/Look.st</filein>
+  <filein>src/GameState.st</filein>
+  <filein>src/Adventure.st</filein>
+  <filein>src/Commands.st</filein>
+  <filein>src/Pirates.st</filein>
+  <filein>src/moving/Storm.st</filein>
   <filein>Run.st</filein>
 </package>

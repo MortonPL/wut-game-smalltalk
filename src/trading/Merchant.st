@@ -1,3 +1,9 @@
+"Merchant class
+
+Responsibilities:
+* buy/sell items from/to a Player
+* answer Player's questions (especially about the offer)"
+
 Object subclass: Merchant [
     | name offer |
 
@@ -11,6 +17,7 @@ Object subclass: Merchant [
         <category: 'initialization'>
         <comment: 'Initializes a merchant instance.'>
         name := aString.
+        (anOffer isMemberOf: Offer) ifFalse: [ SystemExceptions.WrongClass signalOn: anOffer mustBe: Offer ].
         offer := anOffer
     ]
 
@@ -25,7 +32,7 @@ Object subclass: Merchant [
         <comment: 'Answers a topic.'>
         topic = 'offer' ifTrue: [ ^offer printNl ].
         topic = 'topics' ifTrue: [
-            'You can ask about:' displayNl.
+            ('You can ask ', name, ' about:') displayNl.
             ^'  - offer' displayNl
         ].
         'Haven''t heard of it.' displayNl

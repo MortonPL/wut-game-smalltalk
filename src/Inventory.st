@@ -1,24 +1,27 @@
+"Inventory class
+
+Responsibilities:
+* track the state of user inventory
+* describe the state (to console)"
+
 Object subclass: Inventory [
     | content |
     
     Inventory class >> new [
         <category: 'instance creation'>
         <comment: 'Creates an empty inventory.'>
-        | o |
-        o := super new.
-        o init.
-        ^o
+        ^(super new) init; yourself
     ]
 
     init [
         <category: 'initialization'>
         <comment: 'Initializes a new inventory.'>
         content := Dictionary new.
-        ^self
     ]
 
     serialize: stream [
         <category: 'serde'>
+        <comment: 'Serializes the instance to a stream.'>
         content keysAndValuesDo: [:key :value | 
             stream nextPutAll: key; nextPut: $|;
                    nextPutAll: (value printString); nextPut: $|
@@ -28,6 +31,7 @@ Object subclass: Inventory [
 
     deserialize: stream [
         <category: 'serde'>
+        <comment: 'Deserializes the instance from a stream.'>
         | stream2 key value |
         content empty.
         stream2 := ReadStream on: (stream upTo: $\).
@@ -77,9 +81,9 @@ Object subclass: Inventory [
                 items keysAndValuesDo: [ :key :value |
                     ' - ' display.
                     value display.
-                    ' of `' display.
+                    ' of ' display.
                     key display.
-                    '`,' displayNl.
+                    ',' displayNl.
                 ].
                 'and nothing more.' displayNl.
             ].
