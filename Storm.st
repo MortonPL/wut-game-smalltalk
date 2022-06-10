@@ -14,17 +14,17 @@ Game extend [
     ]
 
     dirNumMap := Dictionary from: {
-        #n -> 0.
-        #e -> 1.
-        #s -> 2.
-        #w -> 3
+        'n' -> 0.
+        'e' -> 1.
+        's' -> 2.
+        'w' -> 3
     }.
 
     numDirMap := Dictionary from: {
-        0 -> #n.
-        1 -> #e.
-        2 -> #s.
-        3 -> #w
+        0 -> 'n'.
+        1 -> 'e'.
+        2 -> 's'.
+        3 -> 'w'
     }.
 
     doStorm: direction [

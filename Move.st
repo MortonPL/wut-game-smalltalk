@@ -28,10 +28,10 @@ Object subclass: Move [
     ]
 
     dirMoveMap := Dictionary from: {
-        #n -> [ Move x: 0 y: -1 ].
-        #e -> [ Move x: 1 y: 0 ].
-        #w -> [ Move x: -1 y: 0 ].
-        #s -> [ Move x: 0 y: 1 ]
+        'n' -> [ Move x: 0 y: -1 ].
+        'e' -> [ Move x: 1 y: 0 ].
+        'w' -> [ Move x: -1 y: 0 ].
+        's' -> [ Move x: 0 y: 1 ]
     }.
  
     Move class >> fromDirection: direction [
@@ -41,7 +41,7 @@ Object subclass: Move [
         r := super new.
         initialized := false.
         ^(dirMoveMap at: direction
-            ifAbsent: [ ^self error: 'Incorrect argument for message fromDirection: must be one of #n, #e, #w, #s' ])
+            ifAbsent: [ ^self error: 'Incorrect argument for message fromDirection: must be one of ''n'', ''e'', ''w'', ''s''' ])
             value
     ]
 
@@ -81,12 +81,12 @@ Object subclass: Move [
         ^xMove = 0
             ifTrue: [ yMove = 0
                 ifTrue: [ nil ]
-                ifFalse: [ yMove > 0 ifTrue: [ #s ] ifFalse: [ #n ] ]
+                ifFalse: [ yMove > 0 ifTrue: [ 's' ] ifFalse: [ 'n' ] ]
             ] ifFalse: [ yMove = 0
-                ifTrue: [ xMove > 0 ifTrue: [ #e ] ifFalse: [ #w ] ]
+                ifTrue: [ xMove > 0 ifTrue: [ 'e' ] ifFalse: [ 'w' ] ]
                 ifFalse: [ xMove > 0
-                    ifTrue: [ yMove > 0 ifTrue: [ #se ] ifFalse: [ #ne ] ]
-                    ifFalse: [ yMove > 0 ifTrue: [ #sw ] ifFalse: [ #nw ] ]
+                    ifTrue: [ yMove > 0 ifTrue: [ 'se' ] ifFalse: [ 'ne' ] ]
+                    ifFalse: [ yMove > 0 ifTrue: [ 'sw' ] ifFalse: [ 'nw' ] ]
                 ]
             ]
     ]

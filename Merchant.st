@@ -23,20 +23,20 @@ Object subclass: Merchant [
     ask: topic [
         <category: 'printer'>
         <comment: 'Displays the offer.'>
-        topic asSymbol = #offer ifTrue: [ offer printNl ]
+        topic = 'offer' ifTrue: [ offer printNl ]
     ]
 
     sells: itemName [
         <category: 'TODO'>
         <comment: 'TODO'>
-        offer selling at: itemName asSymbol ifAbsent: [ ^false ].
+        offer selling at: itemName ifAbsent: [ ^false ].
         ^true
     ]
 
     buys: itemName [
         <category: 'TODO'>
         <comment: 'TODO'>
-        offer buying at: itemName asSymbol ifAbsent: [ ^false ].
+        offer buying at: itemName ifAbsent: [ ^false ].
         ^true
     ]
 

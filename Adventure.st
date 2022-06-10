@@ -76,20 +76,20 @@ Object subclass: Game [
         map := Map new.
 
         instructionMap := Dictionary new.
-        self registerInstruction: #help short: #h code: [ instructionsText displayLines. ] argc: 0.
-        self registerInstruction: #look short: #l code: [ self lookAround. ] argc: 0.
-        self registerInstruction: #inventory short: #i code: [ self showInventory. ] argc: 0.
-        self registerInstruction: #appraise short: #a code: [ :args | self appraiseItem: (args at: 1). ] argc: 1.
-        self registerInstruction: #ask short: #k code: [ :args | self askAbout: (args at: 1). ] argc: 1.
-        self registerInstruction: #north short: #n code: [ self movePlayer: #n. ] argc: 0.
-        self registerInstruction: #east short: #e code: [ self movePlayer: #e. ] argc: 0.
-        self registerInstruction: #south short: #s code: [ self movePlayer: #s. ] argc: 0.
-        self registerInstruction: #west short: #w code: [ self movePlayer: #w. ] argc: 0.
-        self registerInstruction: #buy short: #b code: [ :args | self buyItem: (args at: 1) quantity: (args at: 2). ] argc: 2.
-        self registerInstruction: #sell short: #z code: [ :args | self sellItem: (args at: 1) quantity: (args at: 2). ] argc: 2.
-        self registerInstruction: #save short: #v code: [ :args | self saveStateTo: (args at: 1). ] argc: 1.
-        self registerInstruction: #load short: #d code: [ :args | self loadStateFrom: (args at: 1). ] argc: 1.
-        self registerInstruction: #quit short: #q code: [ isOver := true ] argc: 0
+        self registerInstruction: 'help' short: 'h' code: [ instructionsText displayLines. ] argc: 0.
+        self registerInstruction: 'look' short: 'l' code: [ self lookAround. ] argc: 0.
+        self registerInstruction: 'inventory' short: 'i' code: [ self showInventory. ] argc: 0.
+        self registerInstruction: 'appraise' short: 'a' code: [ :args | self appraiseItem: (args at: 1). ] argc: 1.
+        self registerInstruction: 'ask' short: 'k' code: [ :args | self askAbout: (args at: 1). ] argc: 1.
+        self registerInstruction: 'north' short: 'n' code: [ self movePlayer: 'n'. ] argc: 0.
+        self registerInstruction: 'east' short: 'e' code: [ self movePlayer: 'e'. ] argc: 0.
+        self registerInstruction: 'south' short: 's' code: [ self movePlayer: 's'. ] argc: 0.
+        self registerInstruction: 'west' short: 'w' code: [ self movePlayer: 'w'. ] argc: 0.
+        self registerInstruction: 'buy' short: 'b' code: [ :args | self buyItem: (args at: 1) quantity: (args at: 2) asInteger. ] argc: 2.
+        self registerInstruction: 'sell' short: 'z' code: [ :args | self sellItem: (args at: 1) quantity: (args at: 2) asInteger. ] argc: 2.
+        self registerInstruction: 'save' short: 'v' code: [ :args | self saveStateTo: (args at: 1). ] argc: 1.
+        self registerInstruction: 'load' short: 'd' code: [ :args | self loadStateFrom: (args at: 1). ] argc: 1.
+        self registerInstruction: 'quit' short: 'q' code: [ isOver := true ] argc: 0
     ]
 
     movePlayer: direction [
@@ -136,14 +136,14 @@ Object subclass: Game [
         tile := map atX: (position column) atY: (position row).
         (tile isKindOf: Island) ifFalse: [ ^'There is no merchant here' displayNl ].
         merchant := tile merchant.
-        merchant sells: itemName ifFalse: [ ^(merchant name, ' has no ', itemName, ' in stock') displayNl ].
+        (merchant sells: itemName) ifFalse: [ ^(merchant name, ' has no ', itemName, ' in stock') displayNl ].
         unitPrice := merchant offer sellingPriceForSingle: itemName.
         totalPrice := anInteger * unitPrice.
         coins := state inventory count: 'coin'.
         coins < totalPrice ifTrue: [ ^'Come back when you''re a little richer.' displayNl ].
         state inventory modify: 'coin' by: totalPrice negated.
         state inventory modify: itemName by: anInteger.
-        ('You bought ', anInteger, ' of ', itemName, ' from ', merchant name , ' for ', totalPrice, ' coins.') displayNl.
+        ('You bought ', anInteger printString, ' of ', itemName, ' from ', merchant name , ' for ', totalPrice printString, ' coins.') displayNl.
     ]
 
     sellItem: itemName quantity: anInteger [
@@ -155,15 +155,14 @@ Object subclass: Game [
         tile := map atX: (position column) atY: (position row).
         (tile isKindOf: Island) ifFalse: [ ^'There is no merchant here' displayNl ].
         merchant := tile merchant.
-        merchant buys: itemName ifFalse: [ ^(merchant name, ' doesn''t want your ', itemName) displayNl ].
+        (merchant buys: itemName) ifFalse: [ ^(merchant name, ' doesn''t want your ', itemName) displayNl ].
         items := state inventory count: itemName.
         items < anInteger ifTrue: [ ^('There is not enough ', itemName, ' on you.') displayNl ].
         unitPrice := merchant offer buyingPriceForSingle: itemName.
         totalPrice := anInteger * unitPrice.
-        coins := state inventory count: 'coin'.
         state inventory modify: itemName by: anInteger negated.
         state inventory modify: 'coin' by: totalPrice.
-        ('You sold ', anInteger, ' of ', itemName, ' to ', merchant name , ' for ', totalPrice, ' coins.') displayNl.
+        ('You sold ', anInteger printString, ' of ', itemName, ' to ', merchant name , ' for ', totalPrice printString, ' coins.') displayNl.
     ]
 
     askAbout: topic [
@@ -213,7 +212,7 @@ Object subclass: Game [
         <category: 'helper'>
         <comment: 'Runs a single command.'>
         | validCommand action argc |
-        validCommand := instructionMap at: (cmd asSymbol) ifAbsent: [ ^'Unknown command.' displayNl. ].
+        validCommand := instructionMap at: cmd ifAbsent: [ ^'Unknown command.' displayNl. ].
         argc := validCommand at: 1.
         (args size == argc)
             ifFalse: [ ^'Invalid amount of arguments.' displayNl. ].

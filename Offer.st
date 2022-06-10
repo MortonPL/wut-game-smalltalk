@@ -7,26 +7,26 @@ Object subclass: Offer [
 
     buying [
         <category: 'accessor'>
-        <comment: 'Returns the buying offer message.'>
+        <comment: 'Returns the buying dictionary.'>
         ^buying
     ]
 
     selling [
         <category: 'accessor'>
-        <comment: 'Returns the selling offer message.'>
+        <comment: 'Returns the selling dictionary.'>
         ^selling
     ]
 
     buying: buyingDict [
         <category: 'accessor'>
-        <comment: 'Returns the buying dictionary.'>
-        buying := Dictionary from: buyingDict
+        <comment: 'Sets the buying dictionary.'>
+        buying := buyingDict.
     ]
 
     selling: sellingDict [
         <category: 'accessor'>
-        <comment: 'Returns the selling dictionary.'>
-        selling := Dictionary from: sellingDict
+        <comment: 'Sets the selling dictionary.'>
+        selling := sellingDict.
     ]
 
     buyingPriceForSingle: itemName [
@@ -52,13 +52,13 @@ Object subclass: Offer [
     printOn: stream [
         <category: 'printer'>
         <comment: 'Displays the offers.'>
-        stream nextPutAll: '[Selling]'; nl.
+        stream nextPutAll: '[Selling]'.
         selling keys sorted do: [ :each |
-            stream nextPutAll: '  - ', each, ' for ', (self sellingPriceForSingle: each), ' coins each'; nl
+            stream nl; nextPutAll: '  - ', each, ' for ', (self sellingPriceForSingle: each) printString, ' coins each'
         ].
-        stream nl; nextPutAll: '[Buying]'; nl.
+        stream nl; nl; nextPutAll: '[Buying]'.
         buying keys sorted do: [ :each |
-            stream nextPutAll: '  - ', each, ' for ', (self buyingPriceForSingle: each), ' coins each'; nl
+            stream nl; nextPutAll: '  - ', each, ' for ', (self buyingPriceForSingle: each) printString, ' coins each'
         ].
     ]
 ]
