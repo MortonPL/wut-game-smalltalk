@@ -20,22 +20,27 @@ Object subclass: Merchant [
         ^name
     ]
 
-    ask: topic [
+    answer: topic [
         <category: 'printer'>
-        <comment: 'Displays the offer.'>
-        topic = 'offer' ifTrue: [ offer printNl ]
+        <comment: 'Answers a topic.'>
+        topic = 'offer' ifTrue: [ ^offer printNl ].
+        topic = 'topics' ifTrue: [
+            'You can ask about:' displayNl.
+            ^'  - offer' displayNl
+        ].
+        'Haven''t heard of it.' displayNl
     ]
 
     sells: itemName [
-        <category: 'TODO'>
-        <comment: 'TODO'>
+        <category: 'basic'>
+        <comment: 'Checks if merchant has an item in his selling offer (returning true/false)'>
         offer selling at: itemName ifAbsent: [ ^false ].
         ^true
     ]
 
     buys: itemName [
-        <category: 'TODO'>
-        <comment: 'TODO'>
+        <category: 'basic'>
+        <comment: 'Checks if merchant has an item in his buying offer (returning true/false)'>
         offer buying at: itemName ifAbsent: [ ^false ].
         ^true
     ]

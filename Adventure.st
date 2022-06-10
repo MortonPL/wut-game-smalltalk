@@ -33,20 +33,23 @@ Object subclass: Game [
     instructionsText := #(
         'Available commands are:'
         ''
-        'h/help        -- to see this list.'
-        'l/look        -- to look around.'
-        'i/inventory   -- to check inventory.'
-        'a/appraise    -- to appraise items.'
-        'n/north       -- to go north.'
-        'e/east        -- to go east.'
-        's/south       -- to go south.'
-        'w/west        -- to go west.'
-        'b/buy         -- to buy items.'
-        's/sell        -- to sell items.'
-        'k/ask         -- to ask questions.'
-        'v/save <file> -- to save the game.'
-        'd/load <file> -- to load the game.'
-        'q/quit        -- to end the game and quit.'
+        'h/help                 -- to see this list.'
+        'l/look                 -- to look around.'
+        'i/inventory            -- to check inventory.'
+        'a/appraise <name>      -- to appraise items.'
+        'n/north                -- to go north.'
+        'e/east                 -- to go east.'
+        's/south                -- to go south.'
+        'w/west                 -- to go west.'
+        'b/buy <name> <amount>  -- to buy items.'
+        'b/buy <name>           -- to buy an item.'
+        's/sell <name> <amount> -- to sell items.'
+        's/sell <name>          -- to sell an item.'
+        'k/ask                  -- to list available topics.'
+        'k/ask <topic>          -- to ask questions.'
+        'v/save <file>          -- to save the game.'
+        'd/load <file>          -- to load the game.'
+        'q/quit                 -- to end the game and quit.'
     ).
 
     Game class >> new [
@@ -80,13 +83,16 @@ Object subclass: Game [
         self registerInstruction: 'look' short: 'l' code: [ self lookAround. ] argc: 0.
         self registerInstruction: 'inventory' short: 'i' code: [ self showInventory. ] argc: 0.
         self registerInstruction: 'appraise' short: 'a' code: [ :args | self appraiseItem: (args at: 1). ] argc: 1.
-        self registerInstruction: 'ask' short: 'k' code: [ :args | self askAbout: (args at: 1). ] argc: 1.
         self registerInstruction: 'north' short: 'n' code: [ self movePlayer: 'n'. ] argc: 0.
         self registerInstruction: 'east' short: 'e' code: [ self movePlayer: 'e'. ] argc: 0.
         self registerInstruction: 'south' short: 's' code: [ self movePlayer: 's'. ] argc: 0.
         self registerInstruction: 'west' short: 'w' code: [ self movePlayer: 'w'. ] argc: 0.
-        self registerInstruction: 'buy' short: 'b' code: [ :args | self buyItem: (args at: 1) quantity: (args at: 2) asInteger. ] argc: 2.
-        self registerInstruction: 'sell' short: 'z' code: [ :args | self sellItem: (args at: 1) quantity: (args at: 2) asInteger. ] argc: 2.
+        self registerInstruction: 'buy' short: 'b' code: [ :args |
+            self buyItem: (args at: 1) quantity: (args size > 1 ifTrue: [ (args at: 2) asInteger ] ifFalse: [ 1 ]). ] argc: 1.
+        self registerInstruction: 'sell' short: 'z' code: [ :args |
+            self sellItem: (args at: 1) quantity: (args size > 1 ifTrue: [ (args at: 2) asInteger ] ifFalse: [ 1 ]). ] argc: 1.
+        self registerInstruction: 'ask' short: 'k' code: [ :args |
+            self askAbout: (args size > 0 ifTrue: [ args at: 1 ] ifFalse: [ 'topics' ]). ] argc: 0.
         self registerInstruction: 'save' short: 'v' code: [ :args | self saveStateTo: (args at: 1). ] argc: 1.
         self registerInstruction: 'load' short: 'd' code: [ :args | self loadStateFrom: (args at: 1). ] argc: 1.
         self registerInstruction: 'quit' short: 'q' code: [ isOver := true ] argc: 0
@@ -143,7 +149,7 @@ Object subclass: Game [
         coins < totalPrice ifTrue: [ ^'Come back when you''re a little richer.' displayNl ].
         state inventory modify: 'coin' by: totalPrice negated.
         state inventory modify: itemName by: anInteger.
-        ('You bought ', anInteger printString, ' of ', itemName, ' from ', merchant name , ' for ', totalPrice printString, ' coins.') displayNl.
+        ('You bought ', anInteger printString, ' of ', itemName, ' from ', merchant name, ' for ', totalPrice printString, ' coins.') displayNl.
     ]
 
     sellItem: itemName quantity: anInteger [
@@ -162,7 +168,7 @@ Object subclass: Game [
         totalPrice := anInteger * unitPrice.
         state inventory modify: itemName by: anInteger negated.
         state inventory modify: 'coin' by: totalPrice.
-        ('You sold ', anInteger printString, ' of ', itemName, ' to ', merchant name , ' for ', totalPrice printString, ' coins.') displayNl.
+        ('You sold ', anInteger printString, ' of ', itemName, ' to ', merchant name, ' for ', totalPrice printString, ' coins.') displayNl.
     ]
 
     askAbout: topic [
@@ -172,13 +178,14 @@ Object subclass: Game [
         position := state position.
         tile := map atX: (position column) atY: (position row).
         (tile isKindOf: Island) ifFalse: [ ^'There is nobody to ask' displayNl ].
-        tile merchant ask: topic.
+        tile merchant answer: topic.
     ]
 
     saveStateTo: fileName [
         <category: 'command'>
         <comment: 'Save game state to a file.'>
-        fullname := 'saves/' , fileName , '.sav'.
+        | fullname stream |
+        fullname := 'saves/', fileName, '.sav'.
         (File isAccessible: 'saves') ifFalse: [Directory create: 'saves'].
         stream := FileStream open: fullname mode: FileStream write.
         state serialize: stream.
@@ -188,7 +195,8 @@ Object subclass: Game [
     loadStateFrom: fileName [
         <category: 'command'>
         <comment: 'Load game state from a file.'>
-        fullname := 'saves/' , fileName , '.sav'.
+        | fullname stream |
+        fullname := 'saves/', fileName, '.sav'.
         (File isReadable: fullname) ifFalse: [Exception signal: 'File doesn''t exist!'].
         stream := FileStream open: fullname mode: FileStream read.
         state deserialize: stream.
@@ -214,7 +222,7 @@ Object subclass: Game [
         | validCommand action argc |
         validCommand := instructionMap at: cmd ifAbsent: [ ^'Unknown command.' displayNl. ].
         argc := validCommand at: 1.
-        (args size == argc)
+        (args size >= argc)
             ifFalse: [ ^'Invalid amount of arguments.' displayNl. ].
         action := validCommand at: 2.
         action cull: args.

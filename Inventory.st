@@ -29,6 +29,7 @@ Object subclass: Inventory [
     deserialize: stream [
         <category: 'serde'>
         | stream2 key value |
+        content empty.
         stream2 := ReadStream on: (stream upTo: $\).
         [stream2 atEnd] whileFalse: [
             key := (stream2 upTo: $|).
