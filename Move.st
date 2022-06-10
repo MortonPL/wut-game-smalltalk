@@ -3,10 +3,13 @@ Object subclass: Move [
 
     Move class >> new [
         <category: 'instance creation'>
+        <comment: 'Creates a move instance.'>
         ^Move x: 0 y: 0
     ]
 
     setX: x setY: y [
+        <category: 'initialization'>
+        <comment: 'Initializes the move instance with coordinates.'>
         x isInteger ifFalse: [ SystemExceptions.WrongClass signalOn: x mustBe: Integer ].
         y isInteger ifFalse: [ SystemExceptions.WrongClass signalOn: y mustBe: Integer ].
         xMove := x.
@@ -15,6 +18,7 @@ Object subclass: Move [
  
     Move class >> x: horizontal y: vertical [
         <category: 'instance creation'>
+        <comment: 'Creates a move instance from coordinates.'>
         | r |
         horizontal isInteger ifFalse: [ SystemExceptions.WrongClass signalOn: horizontal mustBe: Integer ].
         vertical isInteger ifFalse: [ SystemExceptions.WrongClass signalOn: vertical mustBe: Integer ].
@@ -32,6 +36,7 @@ Object subclass: Move [
  
     Move class >> fromDirection: direction [
         <category: 'instance creation'>
+        <comment: 'Creates a move instance from direction.'>
         | r initialized |
         r := super new.
         initialized := false.
@@ -42,15 +47,19 @@ Object subclass: Move [
 
     x [
         <category: 'accessor'>
+        <comment: 'Returns the x component.'>
         ^xMove
     ]
 
     y [
         <category: 'accessor'>
+        <comment: 'Returns the y component.'>
         ^yMove
     ]
 
     rotateRight [
+        <category: 'helper'>
+        <comment: 'Rotates the movement clockwise.'>
         | tmp |
         tmp := yMove negated.
         yMove := xMove.
@@ -58,6 +67,8 @@ Object subclass: Move [
     ]
 
     rotateLeft [
+        <category: 'helper'>
+        <comment: 'Rotates the movement counterclockwise.'>
         | tmp |
         tmp := xMove negated.
         xMove := yMove.
@@ -65,6 +76,8 @@ Object subclass: Move [
     ]
 
     asDirection [
+        <category: 'helper'>
+        <comment: 'Returns the symbolic direction.'>
         ^xMove = 0
             ifTrue: [ yMove = 0
                 ifTrue: [ nil ]
