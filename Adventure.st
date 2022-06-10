@@ -179,11 +179,21 @@ Object subclass: Game [
     saveStateTo: fileName [
         <category: 'command'>
         <comment: 'Save game state to a file.'>
+        fullname := 'saves/' , fileName , '.sav'.
+        (File isAccessible: 'saves') ifFalse: [Directory create: 'saves'].
+        stream := FileStream open: fullname mode: FileStream write.
+        state serialize: stream.
+        stream close.
     ]
 
     loadStateFrom: fileName [
         <category: 'command'>
         <comment: 'Load game state from a file.'>
+        fullname := 'saves/' , fileName , '.sav'.
+        (File isReadable: fullname) ifFalse: [Exception signal: 'File doesn''t exist!'].
+        stream := FileStream open: fullname mode: FileStream read.
+        state deserialize: stream.
+        stream close.
     ]
 
     readCommand [
