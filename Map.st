@@ -2,6 +2,8 @@ Object subclass: Map [
     | tiles islands merchants outOfBounds |
 
     Map class >> new [
+        <category: 'instance creation'>
+        <comment: 'Creates a map instance.'>
         | map |
         map := super new.
         map init.
@@ -9,6 +11,8 @@ Object subclass: Map [
     ]
 
     init [
+        <category: 'initialization'>
+        <comment: 'Initializes a map instance.'>
         merchants := {
             Merchant new: 'Morshu' offering: (Offer buying: {
                 #rum -> 0.9.
@@ -124,6 +128,7 @@ Object subclass: Map [
 
     atX: x atY: y  [
         <category: 'accessor'>
+        <comment: 'Returns the tile at provided position. Special tile is returned for out of bounds.'>
         | tile |
         tile := (tiles at: y ifAbsent: [ ^outOfBounds ]) at: x ifAbsent: [ ^outOfBounds ].
         ^tile
