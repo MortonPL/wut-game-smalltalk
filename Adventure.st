@@ -51,6 +51,7 @@ Object subclass: Game [
 
     Game class >> new [
         <category: 'instance creation'>
+        <comment: 'Creates a game instance.'>
         | g |
         g := super new.
         g init.
@@ -58,7 +59,8 @@ Object subclass: Game [
     ]
 
     registerInstruction: longName short: shortName code: block argc: count [
-        <category: 'private'>
+        <category: 'helper'>
+        <comment: 'Registers a command handler.'>
         | value |
         value := {count. block}.
         instructionMap at: shortName put: value.
@@ -67,6 +69,7 @@ Object subclass: Game [
 
     init [
         <category: 'initialization'>
+        <comment: 'Initializes the game class.'>
         isOver := false.
         state := GameState new.
         rng := Random new.
@@ -90,7 +93,8 @@ Object subclass: Game [
     ]
 
     movePlayer: direction [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Move player.'>
         | directionString |
         directionString := Direction asString: direction.
         (state position tryMove: (Move fromDirection: direction))
@@ -104,24 +108,28 @@ Object subclass: Game [
     ]
 
     showInventory [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Display player inventory.'>
         state inventory show.
     ]
 
     appraiseItem: item [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Display description of an owned item.'>
         state inventory appraise: item.
     ]
 
     lookAround [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Display the current and surrounding tiles.'>
         | position |
         position := state position.
         map lookAround: position.
     ]
 
     buyItem: itemName quantity: anInteger [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Buy an amount of item from a merchant.'>
         | position tile merchant unitPrice totalPrice coins |
         position := state position.
         anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
@@ -139,7 +147,8 @@ Object subclass: Game [
     ]
 
     sellItem: itemName quantity: anInteger [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Sell an amount of item to a merchant.'>
         | position tile merchant unitPrice totalPrice items coins |
         position := state position.
         anInteger < 1 ifTrue: [ ^'Don''t be silly' displayNl ].
@@ -158,7 +167,8 @@ Object subclass: Game [
     ]
 
     askAbout: topic [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Ask merchant about a topic.'>
         | position tile |
         position := state position.
         tile := map atX: (position column) atY: (position row).
@@ -167,23 +177,31 @@ Object subclass: Game [
     ]
 
     saveStateTo: fileName [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Save game state to a file.'>
     ]
 
     loadStateFrom: fileName [
-        <category: 'private'>
+        <category: 'command'>
+        <comment: 'Load game state from a file.'>
     ]
 
     readCommand [
+        <category: 'helper'>
+        <comment: 'Prompts user for a single command.'>
         Transcript nl; show: '> '.
         ^FileStream stdin nextLine
     ]
 
     getState [
+        <category: 'accessor'>
+        <comment: 'Returns the game state.'>
         ^state
     ]
 
     command: cmd with: args [
+        <category: 'helper'>
+        <comment: 'Runs a single command.'>
         | validCommand action argc |
         validCommand := instructionMap at: (cmd asSymbol) ifAbsent: [ ^'Unknown command.' displayNl. ].
         argc := validCommand at: 1.
@@ -193,13 +211,13 @@ Object subclass: Game [
         action cull: args.
     ]
 
-    "Run the game."
     run [
+        <category: 'main'>
+        <comment: 'App entry point.'>
         | cmd isUnknown tokens |
         introductionText displayLines.
         instructionsText displayLines.
 
-        "Game loop."
         [ isOver ] whileFalse: [
             tokens := self readCommand tokenize: ' '.
             self command: (tokens at: 1) with: (tokens allButFirst).
